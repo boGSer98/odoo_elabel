@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template
+        id="website_sale_product_elabel_button"
+        inherit_id="website_sale.cta_wrapper"
+        name="Website Sale e-Label Button"
+    >
+        <xpath expr="//div[@id='add_to_cart_wrap']" position="inside">
+            <a
+                t-if="product.elabel_enabled and product.elabel_token"
+                class="btn btn-outline-secondary flex-grow-1 flex-lg-grow-0"
+                t-att-href="'/wine/e-label/%s' % product.elabel_token"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                View e-Label
+            </a>
+        </xpath>
+    </template>
+</odoo>

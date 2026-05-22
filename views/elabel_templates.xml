@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="wine_elabel_page" name="Wine e-Label Page">
+        <t t-set="product" t-value="product_tmpl"/>
+        <html>
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <title>
+                    <t t-esc="product.display_name"/> - Wine e-Label
+                </title>
+                <style>
+                    :root {
+                        color-scheme: light;
+                        --bg: #f7f5ef;
+                        --card: #ffffff;
+                        --text: #1f1f1f;
+                        --muted: #6b6f76;
+                        --line: #d9d9d9;
+                        --accent: #7f0f28;
+                    }
+                    * { box-sizing: border-box; }
+                    body {
+                        margin: 0;
+                        background: radial-gradient(circle at top right, #fff6f6, var(--bg) 48%);
+                        color: var(--text);
+                        font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+                        line-height: 1.45;
+                    }
+                    .container {
+                        max-width: 760px;
+                        margin: 32px auto;
+                        padding: 0 16px;
+                    }
+                    .card {
+                        background: var(--card);
+                        border: 1px solid var(--line);
+                        border-radius: 16px;
+                        padding: 24px;
+                    }
+                    h1 {
+                        margin: 0 0 6px;
+                        font-size: 1.45rem;
+                    }
+                    h2 {
+                        margin: 22px 0 8px;
+                        font-size: 1.05rem;
+                    }
+                    .muted {
+                        color: var(--muted);
+                        margin: 0;
+                    }
+                    .ingredient-box {
+                        margin-top: 8px;
+                        padding: 12px;
+                        border: 1px solid var(--line);
+                        border-radius: 10px;
+                        background: #fcfcfc;
+                        white-space: pre-wrap;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 8px;
+                    }
+                    th, td {
+                        border: 1px solid var(--line);
+                        padding: 10px;
+                        text-align: left;
+                        font-size: 0.95rem;
+                    }
+                    th {
+                        background: #f4f4f4;
+                        width: 56%;
+                    }
+                    .footer {
+                        margin-top: 18px;
+                        border-top: 1px solid var(--line);
+                        padding-top: 14px;
+                        font-size: 0.9rem;
+                        color: var(--muted);
+                    }
+                    .pill {
+                        display: inline-block;
+                        margin-top: 14px;
+                        font-size: 0.8rem;
+                        letter-spacing: 0.02em;
+                        color: var(--accent);
+                        border: 1px solid #e9ccd3;
+                        background: #fff4f6;
+                        padding: 4px 10px;
+                        border-radius: 999px;
+                    }
+                </style>
+            </head>
+            <body>
+                <main class="container">
+                    <section class="card">
+                        <h1>
+                            <t t-esc="product.display_name"/>
+                        </h1>
+
+                        <h2>Nutrition declaration</h2>
+                        <p class="pill">Information per 100 ml</p>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Energy</th>
+                                    <td>
+                                        <t t-esc="'%.2f' % product.elabel_energy_kj"/> kJ /
+                                        <t t-esc="'%.2f' % product.elabel_energy_kcal"/> kcal
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Fat</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_fat"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>of which saturates</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_saturates"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>Carbohydrate</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_carbohydrate"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>of which sugars</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_sugars"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>Protein</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_protein"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>Salt</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_salt"/> g</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p class="muted" t-if="product.elabel_nutrition_note" style="margin-top:10px;">
+                            <t t-esc="product.elabel_nutrition_note"/>
+                        </p>
+
+                        <h2>Ingredients</h2>
+                        <div class="ingredient-box" t-if="product.elabel_ingredients">
+                            <t t-esc="product.elabel_ingredients"/>
+                        </div>
+                        <div class="ingredient-box" t-if="not product.elabel_ingredients">-</div>
+
+                        <h2>Allergens</h2>
+                        <div class="ingredient-box">
+                            <t t-esc="product.elabel_allergen_statement or '-'"/>
+                        </div>
+
+                        <h2>Additional substances</h2>
+                        <div class="ingredient-box" t-if="product.elabel_additional_substances">
+                            <t t-esc="product.elabel_additional_substances"/>
+                        </div>
+                        <div class="ingredient-box" t-if="not product.elabel_additional_substances">-</div>
+
+                        <div class="footer">
+                            This page contains mandatory e-label information only.
+                        </div>
+                    </section>
+                </main>
+            </body>
+        </html>
+    </template>
+</odoo>

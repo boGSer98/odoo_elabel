@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="product_template_form_elabel" model="ir.ui.view">
+        <field name="name">product.template.form.elabel</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook" position="inside">
+                <page string="Wine e-Label">
+                    <group>
+                        <group>
+                            <field name="elabel_enabled"/>
+                        </group>
+                        <div
+                            class="d-flex flex-wrap align-items-center gap-2 mt-2"
+                            invisible="not elabel_enabled"
+                        >
+                            <button
+                                name="action_open_elabel"
+                                type="object"
+                                string="Generate e-Label"
+                                class="oe_highlight"
+                            />
+                            <button
+                                name="action_generate_elabel_documents"
+                                type="object"
+                                string="Regenerate QR SVG + PDF"
+                            />
+                            <button
+                                name="action_disable_elabel"
+                                type="object"
+                                string="Disable e-Label"
+                                confirm="Do you want to disable the e-Label for this product?"
+                            />
+                            <button
+                                name="action_view_elabel_url"
+                                type="object"
+                                string="Public e-Label URL"
+                                class="btn-link px-1"
+                            />
+                            <button
+                                name="action_view_elabel_qr_code"
+                                type="object"
+                                string="QR Code URL"
+                                class="btn-link px-1"
+                            />
+                        </div>
+                    </group>
+
+                    <group string="Nutrition (per 100 ml)" invisible="not elabel_enabled">
+                        <group>
+                            <field name="elabel_energy_kj"/>
+                            <field name="elabel_energy_kcal"/>
+                            <field name="elabel_fat"/>
+                            <field name="elabel_saturates"/>
+                        </group>
+                        <group>
+                            <field name="elabel_carbohydrate"/>
+                            <field name="elabel_sugars"/>
+                            <field name="elabel_protein"/>
+                            <field name="elabel_salt"/>
+                        </group>
+                        <field
+                            name="elabel_nutrition_note"
+                            placeholder="Contains negligible amounts of fat, saturates, protein and salt."
+                        />
+                    </group>
+
+                    <group string="Ingredients and Substances" invisible="not elabel_enabled">
+                        <field name="elabel_ingredients" placeholder="grapes, concentrated grape must, ..."/>
+                        <field name="elabel_allergen_statement"/>
+                        <field name="elabel_additional_substances" placeholder="other substances, additives, processing aids, ..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

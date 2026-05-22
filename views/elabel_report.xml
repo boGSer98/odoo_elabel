@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_wine_elabel_pdf_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="product">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <h2>
+                            <t t-esc="product.display_name"/> - Wine e-Label
+                        </h2>
+
+                        <h3>Nutrition declaration</h3>
+                        <p><strong>Information per 100 ml</strong></p>
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th style="width:55%;">Energy</th>
+                                    <td>
+                                        <t t-esc="'%.2f' % product.elabel_energy_kj"/> kJ /
+                                        <t t-esc="'%.2f' % product.elabel_energy_kcal"/> kcal
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Fat</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_fat"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>of which saturates</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_saturates"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>Carbohydrate</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_carbohydrate"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>of which sugars</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_sugars"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>Protein</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_protein"/> g</td>
+                                </tr>
+                                <tr>
+                                    <th>Salt</th>
+                                    <td><t t-esc="'%.2f' % product.elabel_salt"/> g</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p t-if="product.elabel_nutrition_note">
+                            <t t-esc="product.elabel_nutrition_note"/>
+                        </p>
+
+                        <h3>Ingredients</h3>
+                        <p>
+                            <t t-esc="product.elabel_ingredients or '-'"/>
+                        </p>
+
+                        <h3>Allergens</h3>
+                        <p>
+                            <t t-esc="product.elabel_allergen_statement or '-'"/>
+                        </p>
+
+                        <h3>Additional substances</h3>
+                        <p>
+                            <t t-esc="product.elabel_additional_substances or '-'"/>
+                        </p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_wine_elabel_pdf" model="ir.actions.report">
+        <field name="name">Wine e-Label PDF</field>
+        <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">odoo_elabel.report_wine_elabel_pdf_document</field>
+        <field name="report_file">odoo_elabel.report_wine_elabel_pdf_document</field>
+        <field name="print_report_name">'wine_elabel_%s' % (object.default_code or object.id)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
