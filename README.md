@@ -44,10 +44,10 @@ bereit.
 - Route ist oeffentlich und nur lesend
 - Oeffentliche e-Label-Seiten setzen `Vary: Accept-Language, Cookie`, damit Sprachvarianten sauber gecacht werden
 - Webansicht und PDF nutzen denselben QWeb-Baustein fuer Naehrwerte, Zutaten, Allergene und weitere Inhaltsstoffe
-- Uebersetzungen liegen in `i18n/de.po` und `i18n/de_DE.po`
+- Deutsche Übersetzungen liegen in `i18n/de.po` und `i18n/de_DE.po` und verwenden echte Umlaute sowie ß.
 - Sprache wird anhand des Odoo-Benutzerkontexts genutzt; auf der oeffentlichen e-Label-Seite zusaetzlich ueber Website-Sprach-Cookie, Browser-Sprache bzw. `?lang=` aufloesbar
 - Odoo-Manifest-Version muss zwischen 2 und 5 Stellen haben.
-- Verwendetes Schema im Manifest: `19.0.1.3.2` (`odoo_version.odoo_release.modul_version.release.patch`)
+- Verwendetes Schema im Manifest: `19.0.1.3.3` (`odoo_version.odoo_release.modul_version.release.patch`)
 
 ## Installation
 1. Modul in den Addons-Pfad legen.

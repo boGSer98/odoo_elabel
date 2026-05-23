@@ -1,5 +1,9 @@
 # Changelog
 
+## 19.0.1.3.3
+
+- Deutsche Übersetzungen verwenden echte Umlaute und ß statt ASCII-Umschreibungen wie `ae`, `oe`, `ue` und `ss`.
+
 ## 19.0.1.3.2
 
 - Web- und PDF-Ueberschriften werden ueber Python-Labels uebersetzt, damit die e-Label-Ausgabe nicht von uebersetzten QWeb-Architekturen abhaengt.

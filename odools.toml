@@ -1,0 +1,9 @@
+[[config]]
+name = "default"
+odoo_path = "/home/alex/odoo-dev/odoo"
+addons_paths = [
+  "/home/alex/odoo-dev/custom-addons",
+  "/home/alex/odoo-dev/odoo/addons",
+  "$autoDetectAddons"
+]
+diag_missing_imports = "all"
