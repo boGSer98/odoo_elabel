@@ -19,7 +19,8 @@ class WineElabelController(http.Controller):
                 return test
             lower_test = test.lower()
             for available in available_codes:
-                if available.lower() == lower_test:
+                lower_available = available.lower()
+                if lower_available == lower_test or lower_available.startswith(f"{lower_test}_"):
                     return available
         return None
 
@@ -32,6 +33,12 @@ class WineElabelController(http.Controller):
         normalized = self._normalize_lang_code(requested_lang, available_codes)
         if normalized:
             return normalized
+
+        frontend_lang = self._normalize_lang_code(
+            request.httprequest.cookies.get("frontend_lang"), available_codes
+        )
+        if frontend_lang:
+            return frontend_lang
 
         context_lang = self._normalize_lang_code(request.env.context.get("lang"), available_codes)
         if context_lang:
@@ -57,7 +64,7 @@ class WineElabelController(http.Controller):
         type="http",
         auth="public",
         methods=["GET"],
-        website=False,
+        website=True,
         sitemap=False,
     )
     def wine_elabel(self, token, **kwargs):
@@ -81,10 +88,10 @@ class WineElabelController(http.Controller):
 
         response = request.render(
             "odoo_elabel.wine_elabel_page",
-            {"product_tmpl": product_tmpl},
+            {"product_tmpl": product_tmpl, "lang_code": lang_code},
         )
         response.headers["Cache-Control"] = "public, max-age=300"
-        response.headers["Vary"] = "Accept-Language"
+        response.headers["Vary"] = "Accept-Language, Cookie"
         if lang_code:
             response.headers["Content-Language"] = lang_code.replace("_", "-")
         return response

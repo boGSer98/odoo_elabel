@@ -9,10 +9,6 @@ from odoo.exceptions import UserError, ValidationError
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
-    _product_elabel_token_uniq = models.Constraint(
-        "unique(elabel_token)",
-        "The e-label token must be unique.",
-    )
 
     elabel_enabled = fields.Boolean(
         string="Wine e-Label",
@@ -23,7 +19,6 @@ class ProductTemplate(models.Model):
         copy=False,
         readonly=True,
         index=True,
-        default=lambda self: str(uuid.uuid4()),
     )
     elabel_public_url = fields.Char(
         string="Public e-Label URL",
@@ -73,15 +68,25 @@ class ProductTemplate(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            if not vals.get("elabel_token"):
+            if vals.get("elabel_enabled") and not vals.get("elabel_token"):
                 vals["elabel_token"] = str(uuid.uuid4())
         return super().create(vals_list)
 
     def write(self, vals):
         res = super().write(vals)
-        for record in self.filtered(lambda p: p.elabel_enabled and not p.elabel_token):
-            record.elabel_token = str(uuid.uuid4())
+        for record in self.filtered(lambda p: p.elabel_enabled):
+            record._ensure_unique_elabel_token()
         return res
+
+    @api.constrains("elabel_token")
+    def _check_elabel_token_unique(self):
+        for record in self.filtered("elabel_token"):
+            domain = [
+                ("id", "!=", record.id),
+                ("elabel_token", "=", record.elabel_token),
+            ]
+            if self.search_count(domain, limit=1):
+                raise ValidationError(_("The e-label token must be unique."))
 
     @api.constrains(
         "elabel_energy_kj",
@@ -161,9 +166,22 @@ class ProductTemplate(models.Model):
         self.ensure_one()
         if not self.elabel_enabled:
             raise UserError(action_message)
-        if not self.elabel_token:
-            self.elabel_token = str(uuid.uuid4())
+        self._ensure_unique_elabel_token()
         self._compute_elabel_urls()
+
+    def _ensure_unique_elabel_token(self):
+        self.ensure_one()
+        if self.elabel_token:
+            duplicate = self.search(
+                [
+                    ("id", "!=", self.id),
+                    ("elabel_token", "=", self.elabel_token),
+                ],
+                limit=1,
+            )
+            if not duplicate:
+                return
+        self.elabel_token = str(uuid.uuid4())
 
     def _get_elabel_public_route(self):
         self.ensure_one()
@@ -179,6 +197,14 @@ class ProductTemplate(models.Model):
         self.ensure_one()
         encoded_url = quote(self.elabel_public_url, safe="")
         return f"/report/barcode/?barcode_type=QR&value={encoded_url}&width=240&height=240"
+
+    def _get_elabel_render_lang(self):
+        self.ensure_one()
+        available_codes = set(self.env["res.lang"].sudo().search([]).mapped("code"))
+        for lang_code in (self.env.context.get("lang"), self.env.user.lang, "de_DE", "de"):
+            if lang_code in available_codes:
+                return lang_code
+        return self.env.context.get("lang")
 
     @api.depends("elabel_enabled", "elabel_token")
     def _compute_elabel_urls(self):
@@ -257,7 +283,10 @@ class ProductTemplate(models.Model):
 
     def _generate_elabel_pdf(self):
         self.ensure_one()
-        pdf_bytes, _content_type = self.env["ir.actions.report"].sudo()._render_qweb_pdf(
+        lang_code = self._get_elabel_render_lang()
+        pdf_bytes, _content_type = self.env["ir.actions.report"].sudo().with_context(
+            lang=lang_code
+        )._render_qweb_pdf(
             "odoo_elabel.action_report_wine_elabel_pdf",
             res_ids=self.ids,
         )

@@ -11,6 +11,7 @@ bereit.
 ## Umfang
 - Aktivierung je Produkt (`Wine e-Label`)
 - Deaktivierung ueber Button `Disable e-Label`
+- Token werden erst fuer aktive e-Labels vergeben und bei Bedarf automatisch eindeutig erneuert
 - Zutatenliste
 - Allergiehinweis (zur Abstimmung mit dem physischen Etikett)
 - Weitere Inhaltsstoffe / Zusatzinformationen
@@ -30,6 +31,8 @@ bereit.
 - Die Link-Beschriftungen `Public e-Label URL` und `QR Code URL` oeffnen die jeweilige URL direkt, ohne die URL als langen Text anzuzeigen
 - Optionaler Button `Regenerate QR SVG + PDF` fuer manuelles Neuaufbauen der Dateien
 - Oeffentliche e-Label-Ausgabe in der Reihenfolge: Name, Naehrwertdeklaration, Zutaten, Allergene, weitere Inhaltsstoffe
+- Oeffentliche e-Label-Seite nutzt die Website-Sprache, den Sprach-Cookie, `?lang=` oder die Browser-Sprache fuer die Ausgabe
+- PDF-Erzeugung nutzt einen expliziten Odoo-Sprachkontext, damit uebersetzte QWeb- und Python-Texte im PDF ankommen
 - Website-Shop-Integration (`website`, `website_sale`):
   - Auf der Produktseite wird im Bereich `Add to cart` ein Button `View e-Label` angezeigt
   - Der Button oeffnet die e-Label-Seite in einem neuen Browser-Tab/Fenster
@@ -38,12 +41,12 @@ bereit.
 - Abhaengigkeiten: `product`, `website`, `website_sale`
 - Kein zusaetzliches Frontend-Framework, reine Odoo-QWeb-Ausgabe
 - Route ist oeffentlich und nur lesend
-- Oeffentliche e-Label-Seiten setzen `Vary: Accept-Language`, damit Sprachvarianten sauber gecacht werden
+- Oeffentliche e-Label-Seiten setzen `Vary: Accept-Language, Cookie`, damit Sprachvarianten sauber gecacht werden
 - Webansicht und PDF nutzen denselben QWeb-Baustein fuer Naehrwerte, Zutaten, Allergene und weitere Inhaltsstoffe
-- Uebersetzungen liegen in `i18n/de.po`
-- Sprache wird anhand des Odoo-Benutzerkontexts genutzt; auf der oeffentlichen e-Label-Seite zusaetzlich ueber Browser-Sprache bzw. `?lang=` aufloesbar
+- Uebersetzungen liegen in `i18n/de.po` und `i18n/de_DE.po`
+- Sprache wird anhand des Odoo-Benutzerkontexts genutzt; auf der oeffentlichen e-Label-Seite zusaetzlich ueber Website-Sprach-Cookie, Browser-Sprache bzw. `?lang=` aufloesbar
 - Odoo-Manifest-Version muss zwischen 2 und 5 Stellen haben.
-- Verwendetes Schema im Manifest: `19.0.1.2.3` (`odoo_version.odoo_release.modul_version.release.patch`)
+- Verwendetes Schema im Manifest: `19.0.1.3.1` (`odoo_version.odoo_release.modul_version.release.patch`)
 
 ## Installation
 1. Modul in den Addons-Pfad legen.

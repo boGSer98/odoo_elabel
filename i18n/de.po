@@ -316,43 +316,8 @@ msgstr "e-Label anzeigen"
 
 #. module: odoo_elabel
 #: code:addons/odoo_elabel/models/product_template.py:0
-msgid "Please enable Wine e-Label before opening the QR code."
-msgstr "Bitte aktiviere zuerst das Wein-e-Label, bevor der QR-Code geoeffnet wird."
-
-#. module: odoo_elabel
-#: code:addons/odoo_elabel/models/product_template.py:0
 msgid "QR code generation is unavailable: %s"
 msgstr "Die QR-Code-Erzeugung ist nicht verfuegbar: %s"
-
-#. module: odoo_elabel
-#: model_terms:ir.ui.view,arch_db:odoo_elabel.product_template_form_elabel
-msgid "Generate QR SVG + PDF"
-msgstr "QR-SVG + PDF erzeugen"
-
-#. module: odoo_elabel
-#: model_terms:ir.ui.view,arch_db:odoo_elabel.product_template_form_elabel
-msgid "Generate + Open Public e-Label"
-msgstr "Oeffentliches e-Label erzeugen + oeffnen"
-
-#. module: odoo_elabel
-#: model_terms:ir.ui.view,arch_db:odoo_elabel.product_template_form_elabel
-msgid "Generate e-Label"
-msgstr "e-Label erzeugen"
-
-#. module: odoo_elabel
-#: model_terms:ir.ui.view,arch_db:odoo_elabel.product_template_form_elabel
-msgid "Regenerate QR SVG + PDF"
-msgstr "QR-SVG + PDF neu erzeugen"
-
-#. module: odoo_elabel
-#: model_terms:ir.ui.view,arch_db:odoo_elabel.product_template_form_elabel
-msgid "Disable e-Label"
-msgstr "e-Label deaktivieren"
-
-#. module: odoo_elabel
-#: model_terms:ir.ui.view,arch_db:odoo_elabel.product_template_form_elabel
-msgid "Do you want to disable the e-Label for this product?"
-msgstr "Moechtest du das e-Label fuer dieses Produkt deaktivieren?"
 
 #. module: odoo_elabel
 #: code:addons/odoo_elabel/models/product_template.py:0
@@ -388,8 +353,3 @@ msgstr "QR-SVG und PDF wurden fuer dieses Produkt aktualisiert."
 #: model:ir.actions.report,name:odoo_elabel.action_report_wine_elabel_pdf
 msgid "Wine e-Label PDF"
 msgstr "Wein-e-Label PDF"
-
-#. module: odoo_elabel
-#: model_terms:ir.ui.view,arch_db:odoo_elabel.website_sale_product_elabel_button
-msgid "View e-Label"
-msgstr "e-Label anzeigen"

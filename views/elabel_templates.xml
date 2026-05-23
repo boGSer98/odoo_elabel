@@ -77,12 +77,12 @@
 
     <template id="wine_elabel_page" name="Wine e-Label Page">
         <t t-set="product" t-value="product_tmpl"/>
-        <html>
+        <html t-att-lang="lang_code and lang_code.replace('_', '-')">
             <head>
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <title>
-                    <t t-esc="product.display_name"/> - Wine e-Label
+                    <t t-esc="product.display_name"/> - <t>Wine e-Label</t>
                 </title>
                 <style>
                     :root {
@@ -176,7 +176,10 @@
                         </h1>
 
                         <t t-set="is_pdf" t-value="False"/>
-                        <t t-call="odoo_elabel.wine_elabel_information"/>
+                        <t
+                            t-call="odoo_elabel.wine_elabel_information"
+                            t-lang="lang_code"
+                        />
 
                         <div class="footer">
                             This page contains mandatory e-label information only.
