@@ -10,6 +10,18 @@ Die Entwicklung erfolgt lokal unter WSL im Pfad:
 
 Odoo wird lokal über localhost getestet.
 
+Die Versionierung soll wie folgt sein:
+19.0.1.0.0
+│    │ │ │
+│    │ │ └─ kleine Korrektur
+│    │ └─── funktionale Erweiterung
+│    └───── Modulversion
+└────────── Odoo-Version
+
+Fasse in CHANGELOG.md alle Änderungen mit der jeweiligen Verionsnummer zusammen.
+
+Bearbeite die Anwenderanleitung mit den neuen Änderungen. Sollten Features gelöscht werden, so passe die Anleitung ebenfalls an. 
+
 ## Odoo-Regeln
 
 - Zielversion: Odoo 19 Community
