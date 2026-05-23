@@ -83,7 +83,8 @@ class WineElabelController(http.Controller):
             "odoo_elabel.wine_elabel_page",
             {"product_tmpl": product_tmpl},
         )
-        response.headers["Cache-Control"] = "public, max-age=3600"
+        response.headers["Cache-Control"] = "public, max-age=300"
+        response.headers["Vary"] = "Accept-Language"
         if lang_code:
             response.headers["Content-Language"] = lang_code.replace("_", "-")
         return response

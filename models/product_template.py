@@ -4,7 +4,7 @@ import re
 from urllib.parse import quote
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class ProductTemplate(models.Model):
@@ -83,30 +83,118 @@ class ProductTemplate(models.Model):
             record.elabel_token = str(uuid.uuid4())
         return res
 
+    @api.constrains(
+        "elabel_energy_kj",
+        "elabel_energy_kcal",
+        "elabel_fat",
+        "elabel_saturates",
+        "elabel_carbohydrate",
+        "elabel_sugars",
+        "elabel_protein",
+        "elabel_salt",
+    )
+    def _check_elabel_nutrition_values(self):
+        nutrition_fields = self._get_elabel_nutrition_field_labels()
+        for record in self:
+            invalid_labels = [
+                label for field_name, label in nutrition_fields if record[field_name] < 0
+            ]
+            if invalid_labels:
+                raise ValidationError(
+                    _("Nutrition values cannot be negative: %s")
+                    % ", ".join(invalid_labels)
+                )
+
+    def _get_elabel_nutrition_field_labels(self):
+        return [
+            ("elabel_energy_kj", _("Energy (kJ)")),
+            ("elabel_energy_kcal", _("Energy (kcal)")),
+            ("elabel_fat", _("Fat")),
+            ("elabel_saturates", _("of which saturates")),
+            ("elabel_carbohydrate", _("Carbohydrate")),
+            ("elabel_sugars", _("of which sugars")),
+            ("elabel_protein", _("Protein")),
+            ("elabel_salt", _("Salt")),
+        ]
+
+    def _format_elabel_float(self, value):
+        return "%.2f" % (value or 0.0)
+
+    def _get_elabel_nutrition_lines(self):
+        self.ensure_one()
+        return [
+            {
+                "label": _("Energy"),
+                "value": _("%(kj)s kJ / %(kcal)s kcal")
+                % {
+                    "kj": self._format_elabel_float(self.elabel_energy_kj),
+                    "kcal": self._format_elabel_float(self.elabel_energy_kcal),
+                },
+            },
+            {
+                "label": _("Fat"),
+                "value": _("%s g") % self._format_elabel_float(self.elabel_fat),
+            },
+            {
+                "label": _("of which saturates"),
+                "value": _("%s g") % self._format_elabel_float(self.elabel_saturates),
+            },
+            {
+                "label": _("Carbohydrate"),
+                "value": _("%s g") % self._format_elabel_float(self.elabel_carbohydrate),
+            },
+            {
+                "label": _("of which sugars"),
+                "value": _("%s g") % self._format_elabel_float(self.elabel_sugars),
+            },
+            {
+                "label": _("Protein"),
+                "value": _("%s g") % self._format_elabel_float(self.elabel_protein),
+            },
+            {
+                "label": _("Salt"),
+                "value": _("%s g") % self._format_elabel_float(self.elabel_salt),
+            },
+        ]
+
+    def _ensure_elabel_ready(self, action_message):
+        self.ensure_one()
+        if not self.elabel_enabled:
+            raise UserError(action_message)
+        if not self.elabel_token:
+            self.elabel_token = str(uuid.uuid4())
+        self._compute_elabel_urls()
+
+    def _get_elabel_public_route(self):
+        self.ensure_one()
+        return f"/wine/e-label/{self.elabel_token}"
+
+    def _get_elabel_public_url(self):
+        self.ensure_one()
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url", "").rstrip("/")
+        route = self._get_elabel_public_route()
+        return f"{base_url}{route}" if base_url else route
+
+    def _get_elabel_qr_code_url(self):
+        self.ensure_one()
+        encoded_url = quote(self.elabel_public_url, safe="")
+        return f"/report/barcode/?barcode_type=QR&value={encoded_url}&width=240&height=240"
+
     @api.depends("elabel_enabled", "elabel_token")
     def _compute_elabel_urls(self):
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url", "").rstrip("/")
         for record in self:
             if not (record.elabel_enabled and record.elabel_token):
                 record.elabel_public_url = False
                 record.elabel_qr_code_url = False
                 continue
 
-            route = f"/wine/e-label/{record.elabel_token}"
-            public_url = f"{base_url}{route}" if base_url else route
-            record.elabel_public_url = public_url
-            encoded_url = quote(public_url, safe="")
-            record.elabel_qr_code_url = (
-                f"/report/barcode/?barcode_type=QR&value={encoded_url}&width=240&height=240"
-            )
+            record.elabel_public_url = record._get_elabel_public_url()
+            record.elabel_qr_code_url = record._get_elabel_qr_code_url()
 
     def action_open_elabel(self):
-        self.ensure_one()
-        if not self.elabel_enabled:
-            raise UserError(_("Please enable Wine e-Label before generating the public page."))
-        if not self.elabel_token:
-            self.elabel_token = str(uuid.uuid4())
-        self._compute_elabel_urls()
+        self._ensure_elabel_ready(
+            _("Please enable Wine e-Label before generating the public page.")
+        )
         self._create_or_update_elabel_documents()
         return {
             "type": "ir.actions.client",
@@ -120,12 +208,9 @@ class ProductTemplate(models.Model):
         }
 
     def action_view_elabel_url(self):
-        self.ensure_one()
-        if not self.elabel_enabled:
-            raise UserError(_("Please enable Wine e-Label before opening the public page."))
-        if not self.elabel_token:
-            self.elabel_token = str(uuid.uuid4())
-        self._compute_elabel_urls()
+        self._ensure_elabel_ready(
+            _("Please enable Wine e-Label before opening the public page.")
+        )
         return {
             "type": "ir.actions.act_url",
             "name": _("Public e-Label"),
@@ -134,12 +219,9 @@ class ProductTemplate(models.Model):
         }
 
     def action_view_elabel_qr_code(self):
-        self.ensure_one()
-        if not self.elabel_enabled:
-            raise UserError(_("Please enable Wine e-Label before opening the QR code."))
-        if not self.elabel_token:
-            self.elabel_token = str(uuid.uuid4())
-        self._compute_elabel_urls()
+        self._ensure_elabel_ready(
+            _("Please enable Wine e-Label before opening the QR code.")
+        )
         return {
             "type": "ir.actions.act_url",
             "name": _("QR Code URL"),
@@ -216,13 +298,9 @@ class ProductTemplate(models.Model):
         self._upsert_elabel_attachment(f"{basename}.pdf", pdf_content, "application/pdf")
 
     def action_generate_elabel_documents(self):
-        self.ensure_one()
-        if not self.elabel_enabled:
-            raise UserError(_("Please enable Wine e-Label before generating documents."))
-
-        if not self.elabel_token:
-            self.elabel_token = str(uuid.uuid4())
-        self._compute_elabel_urls()
+        self._ensure_elabel_ready(
+            _("Please enable Wine e-Label before generating documents.")
+        )
         self._create_or_update_elabel_documents()
 
         return {

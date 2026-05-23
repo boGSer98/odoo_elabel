@@ -9,7 +9,7 @@
             <a
                 t-if="product.elabel_enabled and product.elabel_token"
                 class="btn btn-outline-secondary flex-grow-1 flex-lg-grow-0"
-                t-att-href="'/wine/e-label/%s' % product.elabel_token"
+                t-att-href="product._get_elabel_public_route()"
                 target="_blank"
                 rel="noopener noreferrer"
             >

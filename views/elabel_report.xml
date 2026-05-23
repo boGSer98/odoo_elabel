@@ -9,62 +9,8 @@
                             <t t-esc="product.display_name"/> - Wine e-Label
                         </h2>
 
-                        <h3>Nutrition declaration</h3>
-                        <p><strong>Information per 100 ml</strong></p>
-                        <table class="table table-sm table-bordered">
-                            <tbody>
-                                <tr>
-                                    <th style="width:55%;">Energy</th>
-                                    <td>
-                                        <t t-esc="'%.2f' % product.elabel_energy_kj"/> kJ /
-                                        <t t-esc="'%.2f' % product.elabel_energy_kcal"/> kcal
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Fat</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_fat"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>of which saturates</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_saturates"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>Carbohydrate</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_carbohydrate"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>of which sugars</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_sugars"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>Protein</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_protein"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>Salt</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_salt"/> g</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <p t-if="product.elabel_nutrition_note">
-                            <t t-esc="product.elabel_nutrition_note"/>
-                        </p>
-
-                        <h3>Ingredients</h3>
-                        <p>
-                            <t t-esc="product.elabel_ingredients or '-'"/>
-                        </p>
-
-                        <h3>Allergens</h3>
-                        <p>
-                            <t t-esc="product.elabel_allergen_statement or '-'"/>
-                        </p>
-
-                        <h3>Additional substances</h3>
-                        <p>
-                            <t t-esc="product.elabel_additional_substances or '-'"/>
-                        </p>
+                        <t t-set="is_pdf" t-value="True"/>
+                        <t t-call="odoo_elabel.wine_elabel_information"/>
                     </div>
                 </t>
             </t>

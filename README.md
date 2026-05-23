@@ -21,6 +21,7 @@ bereit.
   - Eiweiss
   - Salz
 - Oeffentliche URL + QR-Code-Link (basierend auf Odoo Standard-Barcode-Route)
+- Validierung gegen negative Naehrwerte
 - Button `Generate e-Label` im Produkt:
   - erzeugt/aktualisiert automatisch QR-Code als `.svg`
   - erzeugt/aktualisiert automatisch e-Label als `.pdf`
@@ -37,6 +38,8 @@ bereit.
 - Abhaengigkeiten: `product`, `website`, `website_sale`
 - Kein zusaetzliches Frontend-Framework, reine Odoo-QWeb-Ausgabe
 - Route ist oeffentlich und nur lesend
+- Oeffentliche e-Label-Seiten setzen `Vary: Accept-Language`, damit Sprachvarianten sauber gecacht werden
+- Webansicht und PDF nutzen denselben QWeb-Baustein fuer Naehrwerte, Zutaten, Allergene und weitere Inhaltsstoffe
 - Uebersetzungen liegen in `i18n/de.po`
 - Sprache wird anhand des Odoo-Benutzerkontexts genutzt; auf der oeffentlichen e-Label-Seite zusaetzlich ueber Browser-Sprache bzw. `?lang=` aufloesbar
 - Odoo-Manifest-Version muss zwischen 2 und 5 Stellen haben.

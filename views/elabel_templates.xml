@@ -1,5 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <template id="wine_elabel_nutrition_table" name="Wine e-Label Nutrition Table">
+        <table t-att-class="table_class or ''">
+            <tbody>
+                <tr t-foreach="product._get_elabel_nutrition_lines()" t-as="line">
+                    <th t-att-style="th_style or ''">
+                        <t t-esc="line['label']"/>
+                    </th>
+                    <td>
+                        <t t-esc="line['value']"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <template id="wine_elabel_information" name="Wine e-Label Information">
+        <t t-set="is_pdf" t-value="is_pdf or False"/>
+
+        <t t-if="is_pdf">
+            <h3>Nutrition declaration</h3>
+            <p><strong>Information per 100 ml</strong></p>
+            <t t-set="table_class" t-value="'table table-sm table-bordered'"/>
+            <t t-set="th_style" t-value="'width:55%;'"/>
+            <t t-call="odoo_elabel.wine_elabel_nutrition_table"/>
+
+            <p t-if="product.elabel_nutrition_note">
+                <t t-esc="product.elabel_nutrition_note"/>
+            </p>
+
+            <h3>Ingredients</h3>
+            <p>
+                <t t-esc="product.elabel_ingredients or '-'"/>
+            </p>
+
+            <h3>Allergens</h3>
+            <p>
+                <t t-esc="product.elabel_allergen_statement or '-'"/>
+            </p>
+
+            <h3>Additional substances</h3>
+            <p>
+                <t t-esc="product.elabel_additional_substances or '-'"/>
+            </p>
+        </t>
+
+        <t t-else="">
+            <h2>Nutrition declaration</h2>
+            <p class="pill">Information per 100 ml</p>
+            <t t-set="table_class" t-value="''"/>
+            <t t-set="th_style" t-value="''"/>
+            <t t-call="odoo_elabel.wine_elabel_nutrition_table"/>
+
+            <p class="muted" t-if="product.elabel_nutrition_note" style="margin-top:10px;">
+                <t t-esc="product.elabel_nutrition_note"/>
+            </p>
+
+            <h2>Ingredients</h2>
+            <div class="ingredient-box" t-if="product.elabel_ingredients">
+                <t t-esc="product.elabel_ingredients"/>
+            </div>
+            <div class="ingredient-box" t-if="not product.elabel_ingredients">-</div>
+
+            <h2>Allergens</h2>
+            <div class="ingredient-box">
+                <t t-esc="product.elabel_allergen_statement or '-'"/>
+            </div>
+
+            <h2>Additional substances</h2>
+            <div class="ingredient-box" t-if="product.elabel_additional_substances">
+                <t t-esc="product.elabel_additional_substances"/>
+            </div>
+            <div class="ingredient-box" t-if="not product.elabel_additional_substances">-</div>
+        </t>
+    </template>
+
     <template id="wine_elabel_page" name="Wine e-Label Page">
         <t t-set="product" t-value="product_tmpl"/>
         <html>
@@ -100,64 +175,8 @@
                             <t t-esc="product.display_name"/>
                         </h1>
 
-                        <h2>Nutrition declaration</h2>
-                        <p class="pill">Information per 100 ml</p>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <th>Energy</th>
-                                    <td>
-                                        <t t-esc="'%.2f' % product.elabel_energy_kj"/> kJ /
-                                        <t t-esc="'%.2f' % product.elabel_energy_kcal"/> kcal
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Fat</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_fat"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>of which saturates</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_saturates"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>Carbohydrate</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_carbohydrate"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>of which sugars</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_sugars"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>Protein</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_protein"/> g</td>
-                                </tr>
-                                <tr>
-                                    <th>Salt</th>
-                                    <td><t t-esc="'%.2f' % product.elabel_salt"/> g</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <p class="muted" t-if="product.elabel_nutrition_note" style="margin-top:10px;">
-                            <t t-esc="product.elabel_nutrition_note"/>
-                        </p>
-
-                        <h2>Ingredients</h2>
-                        <div class="ingredient-box" t-if="product.elabel_ingredients">
-                            <t t-esc="product.elabel_ingredients"/>
-                        </div>
-                        <div class="ingredient-box" t-if="not product.elabel_ingredients">-</div>
-
-                        <h2>Allergens</h2>
-                        <div class="ingredient-box">
-                            <t t-esc="product.elabel_allergen_statement or '-'"/>
-                        </div>
-
-                        <h2>Additional substances</h2>
-                        <div class="ingredient-box" t-if="product.elabel_additional_substances">
-                            <t t-esc="product.elabel_additional_substances"/>
-                        </div>
-                        <div class="ingredient-box" t-if="not product.elabel_additional_substances">-</div>
+                        <t t-set="is_pdf" t-value="False"/>
+                        <t t-call="odoo_elabel.wine_elabel_information"/>
 
                         <div class="footer">
                             This page contains mandatory e-label information only.
