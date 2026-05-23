@@ -6,8 +6,9 @@
                 <t t-set="o" t-value="product"/>
                 <t t-call="web.basic_layout">
                     <div class="page">
+                        <t t-set="elabel_labels" t-value="product._get_elabel_display_labels()"/>
                         <h2>
-                            <t t-esc="product.display_name"/> - <span>Wine e-Label</span>
+                            <t t-esc="product.display_name"/> - <span t-out="elabel_labels['title']"/>
                         </h2>
 
                         <t t-set="is_pdf" t-value="True"/>

@@ -11,7 +11,7 @@ Features:
 - QR code (SVG) and PDF generation as product documents
 - Multilingual output based on user/browser language
 """,
-    "version": "19.0.1.3.1",
+    "version": "19.0.1.3.2",
     "category": "Inventory/Product",
     "author": "Custom",
     "license": "AGPL-3",

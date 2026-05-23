@@ -17,10 +17,11 @@
 
     <template id="wine_elabel_information" name="Wine e-Label Information">
         <t t-set="is_pdf" t-value="is_pdf or False"/>
+        <t t-set="elabel_labels" t-value="product._get_elabel_display_labels()"/>
 
         <t t-if="is_pdf">
-            <h3>Nutrition declaration</h3>
-            <p><strong>Information per 100 ml</strong></p>
+            <h3><t t-out="elabel_labels['nutrition_declaration']"/></h3>
+            <p><strong><t t-out="elabel_labels['information_per_100_ml']"/></strong></p>
             <t t-set="table_class" t-value="'table table-sm table-bordered'"/>
             <t t-set="th_style" t-value="'width:55%;'"/>
             <t t-call="odoo_elabel.wine_elabel_nutrition_table"/>
@@ -29,25 +30,25 @@
                 <t t-esc="product.elabel_nutrition_note"/>
             </p>
 
-            <h3>Ingredients</h3>
+            <h3><t t-out="elabel_labels['ingredients']"/></h3>
             <p>
                 <t t-esc="product.elabel_ingredients or '-'"/>
             </p>
 
-            <h3>Allergens</h3>
+            <h3><t t-out="elabel_labels['allergens']"/></h3>
             <p>
                 <t t-esc="product.elabel_allergen_statement or '-'"/>
             </p>
 
-            <h3>Additional substances</h3>
+            <h3><t t-out="elabel_labels['additional_substances']"/></h3>
             <p>
                 <t t-esc="product.elabel_additional_substances or '-'"/>
             </p>
         </t>
 
         <t t-else="">
-            <h2>Nutrition declaration</h2>
-            <p class="pill">Information per 100 ml</p>
+            <h2><t t-out="elabel_labels['nutrition_declaration']"/></h2>
+            <p class="pill"><t t-out="elabel_labels['information_per_100_ml']"/></p>
             <t t-set="table_class" t-value="''"/>
             <t t-set="th_style" t-value="''"/>
             <t t-call="odoo_elabel.wine_elabel_nutrition_table"/>
@@ -56,18 +57,18 @@
                 <t t-esc="product.elabel_nutrition_note"/>
             </p>
 
-            <h2>Ingredients</h2>
+            <h2><t t-out="elabel_labels['ingredients']"/></h2>
             <div class="ingredient-box" t-if="product.elabel_ingredients">
                 <t t-esc="product.elabel_ingredients"/>
             </div>
             <div class="ingredient-box" t-if="not product.elabel_ingredients">-</div>
 
-            <h2>Allergens</h2>
+            <h2><t t-out="elabel_labels['allergens']"/></h2>
             <div class="ingredient-box">
                 <t t-esc="product.elabel_allergen_statement or '-'"/>
             </div>
 
-            <h2>Additional substances</h2>
+            <h2><t t-out="elabel_labels['additional_substances']"/></h2>
             <div class="ingredient-box" t-if="product.elabel_additional_substances">
                 <t t-esc="product.elabel_additional_substances"/>
             </div>
@@ -77,12 +78,13 @@
 
     <template id="wine_elabel_page" name="Wine e-Label Page">
         <t t-set="product" t-value="product_tmpl"/>
+        <t t-set="elabel_labels" t-value="product._get_elabel_display_labels()"/>
         <html t-att-lang="lang_code and lang_code.replace('_', '-')">
             <head>
                 <meta charset="utf-8"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <title>
-                    <t t-esc="product.display_name"/> - <t>Wine e-Label</t>
+                    <t t-esc="product.display_name"/> - <t t-out="elabel_labels['title']"/>
                 </title>
                 <style>
                     :root {
@@ -182,7 +184,7 @@
                         />
 
                         <div class="footer">
-                            This page contains mandatory e-label information only.
+                            <t t-out="elabel_labels['mandatory_information_only']"/>
                         </div>
                     </section>
                 </main>

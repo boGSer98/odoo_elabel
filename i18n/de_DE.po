@@ -17,11 +17,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Contains sulphites"
 msgstr "Enthaelt Sulfite"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Public e-Label"
 msgstr "Oeffentliches e-Label"
@@ -91,6 +93,8 @@ msgid "Ingredients shown on the electronic label."
 msgstr "Zutaten, die auf dem elektronischen Etikett angezeigt werden."
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.product_template_form_elabel
 msgid "Ingredients"
@@ -102,12 +106,16 @@ msgid "Ingredients and Substances"
 msgstr "Zutaten und Inhaltsstoffe"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.report_wine_elabel_pdf_document
 msgid "Allergens"
 msgstr "Allergene"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.report_wine_elabel_pdf_document
 msgid "Additional substances"
@@ -119,6 +127,8 @@ msgid "Electronic wine label (EU)"
 msgstr "Elektronisches Weinetikett (EU)"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "Information per 100 ml"
 msgstr "Angaben pro 100 ml"
@@ -129,6 +139,8 @@ msgid "Optional Nutrition Note"
 msgstr "Optionale Naehrwertanmerkung"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "Protein"
 msgstr "Eiweiss"
@@ -149,6 +161,8 @@ msgid "QR Code URL"
 msgstr "QR-Code-URL"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "Salt"
 msgstr "Salz"
@@ -174,6 +188,8 @@ msgid "e-Label Token"
 msgstr "e-Label-Token"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model:ir.model.fields,field_description:odoo_elabel.field_product_template__elabel_enabled
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.product_template_form_elabel
 msgid "Wine e-Label"
@@ -190,6 +206,8 @@ msgid "Nutrition (per 100 ml)"
 msgstr "Naehrwerte (pro 100 ml)"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "Nutrition declaration"
 msgstr "Naehrwertdeklaration"
@@ -205,31 +223,43 @@ msgid "Allergens (physical label):"
 msgstr "Allergene (physisches Etikett):"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "This page contains mandatory e-label information only."
 msgstr "Diese Seite enthaelt ausschliesslich verpflichtende e-Label-Informationen."
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "Energy"
 msgstr "Energie"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "Fat"
 msgstr "Fett"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "of which saturates"
 msgstr "davon gesaettigte Fettsaeuren"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "Carbohydrate"
 msgstr "Kohlenhydrate"
 
 #. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/product_template.py:0
 #: model_terms:ir.ui.view,arch_db:odoo_elabel.wine_elabel_page
 msgid "of which sugars"
 msgstr "davon Zucker"
@@ -245,46 +275,55 @@ msgid "Contains negligible amounts of fat, saturates, protein and salt."
 msgstr "Enthaelt vernachlaessigbare Mengen an Fett, gesaettigten Fettsaeuren, Eiweiss und Salz."
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Please enable Wine e-Label before generating documents."
 msgstr "Bitte aktiviere zuerst das Wein-e-Label, bevor Dokumente erzeugt werden."
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Please enable Wine e-Label before generating the public page."
 msgstr "Bitte aktiviere zuerst das Wein-e-Label, bevor die oeffentliche Seite erzeugt wird."
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Please enable Wine e-Label before opening the public page."
 msgstr "Bitte aktiviere zuerst das Wein-e-Label, bevor die oeffentliche Seite geoeffnet wird."
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Please enable Wine e-Label before opening the QR code."
 msgstr "Bitte aktiviere zuerst das Wein-e-Label, bevor der QR-Code geoeffnet wird."
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Nutrition values cannot be negative: %s"
 msgstr "Naehrwerte duerfen nicht negativ sein: %s"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Energy (kJ)"
 msgstr "Energie (kJ)"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "Energy (kcal)"
 msgstr "Energie (kcal)"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "%(kj)s kJ / %(kcal)s kcal"
 msgstr "%(kj)s kJ / %(kcal)s kcal"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "%s g"
 msgstr "%s g"
@@ -315,36 +354,43 @@ msgid "View e-Label"
 msgstr "e-Label anzeigen"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "QR code generation is unavailable: %s"
 msgstr "Die QR-Code-Erzeugung ist nicht verfuegbar: %s"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "e-Label deactivated"
 msgstr "e-Label deaktiviert"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "The e-Label has been disabled for this product."
 msgstr "Das e-Label wurde fuer dieses Produkt deaktiviert."
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "e-Label generated"
 msgstr "e-Label erzeugt"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "The e-Label documents have been generated for this product."
 msgstr "Die e-Label-Dokumente wurden fuer dieses Produkt erzeugt."
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "e-Label documents regenerated"
 msgstr "e-Label-Dokumente neu erzeugt"
 
 #. module: odoo_elabel
+#. odoo-python
 #: code:addons/odoo_elabel/models/product_template.py:0
 msgid "The QR SVG and PDF have been updated for this product."
 msgstr "QR-SVG und PDF wurden fuer dieses Produkt aktualisiert."

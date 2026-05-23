@@ -125,6 +125,19 @@ class ProductTemplate(models.Model):
     def _format_elabel_float(self, value):
         return "%.2f" % (value or 0.0)
 
+    def _get_elabel_display_labels(self):
+        return {
+            "title": _("Wine e-Label"),
+            "nutrition_declaration": _("Nutrition declaration"),
+            "information_per_100_ml": _("Information per 100 ml"),
+            "ingredients": _("Ingredients"),
+            "allergens": _("Allergens"),
+            "additional_substances": _("Additional substances"),
+            "mandatory_information_only": _(
+                "This page contains mandatory e-label information only."
+            ),
+        }
+
     def _get_elabel_nutrition_lines(self):
         self.ensure_one()
         return [
