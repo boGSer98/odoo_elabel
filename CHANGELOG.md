@@ -1,5 +1,9 @@
 # Changelog
 
+## 19.0.1.3.4
+
+- Neues eLabel-App-Icon eingebaut und eine eigene App-Übersichtskachel mit Icon ergänzt.
+
 ## 19.0.1.3.3
 
 - Deutsche Übersetzungen verwenden echte Umlaute und ß statt ASCII-Umschreibungen wie `ae`, `oe`, `ue` und `ss`.

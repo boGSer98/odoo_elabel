@@ -202,7 +202,7 @@ class ProductTemplate(models.Model):
 
     def _get_elabel_public_url(self):
         self.ensure_one()
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url", "").rstrip("/")
+        base_url = self.env["ir.config_parameter"].sudo().get_str("web.base.url", "").rstrip("/")
         route = self._get_elabel_public_route()
         return f"{base_url}{route}" if base_url else route
 

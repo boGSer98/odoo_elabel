@@ -11,17 +11,18 @@ Features:
 - QR code (SVG) and PDF generation as product documents
 - Multilingual output based on user/browser language
 """,
-    "version": "19.0.1.3.3",
+    "version": "saas~19.4.1.3.4",
     "category": "Inventory/Product",
     "author": "Custom",
     "license": "AGPL-3",
     "depends": ["product", "website", "website_sale"],
     "data": [
+        "views/elabel_menu.xml",
         "views/product_template_views.xml",
         "views/elabel_templates.xml",
         "views/elabel_report.xml",
         "views/website_sale_templates.xml",
     ],
     "installable": True,
-    "application": False,
+    "application": True,
 }
