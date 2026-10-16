@@ -10,8 +10,10 @@ jobs:
         python-version: ['3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - run: python scripts/checks.py
-      - run: git show --format= --check HEAD
+      - run: git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol show --format= --check HEAD
