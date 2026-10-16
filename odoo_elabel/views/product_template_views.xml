@@ -10,14 +10,15 @@
     <field name="elabel_pending_changes" invisible="1"/><field name="elabel_documents_stale" invisible="1"/>
     <div class="d-flex flex-wrap gap-2 mb-3">
      <button name="action_submit_elabel" string="Zur Prüfung einreichen" type="object" groups="odoo_elabel.group_elabel_editor,base.group_system"/>
-     <button name="action_publish_elabel" string="Geprüfte Fassung veröffentlichen" type="object" groups="odoo_elabel.group_elabel_reviewer,base.group_system" confirm="Diese Fassung wurde fachlich und sprachlich geprüft? Die technische Prüfung ersetzt keine rechtliche Beratung."/>
+     <button name="action_publish_elabel" string="Fassung veröffentlichen" type="object" groups="odoo_elabel.group_elabel_reviewer,base.group_system" confirm="Aktuelle Fassung veröffentlichen? Nährwerthinweise verhindern die Freigabe nicht."/>
      <button name="action_generate_elabel_documents" string="PDF und QR-SVG speichern" type="object" groups="odoo_elabel.group_elabel_editor,base.group_system"/>
      <button name="action_view_elabel_url" string="Öffentliche Fassung ansehen" type="object" invisible="not elabel_current_revision_id"/>
      <button name="action_disable_elabel" string="Öffentliche Ausgabe sperren" type="object" groups="odoo_elabel.group_elabel_reviewer,base.group_system" invisible="not elabel_enabled" confirm="Gedruckte QR-Links zeigen bis zur erneuten Freigabe keine Labelinformationen. Wirklich sperren?"/>
     </div>
+    <div class="alert alert-warning" role="alert" invisible="not elabel_nutrition_warning"><strong>Nährwerthinweis – Freigabe weiterhin möglich</strong><field name="elabel_nutrition_warning" nolabel="1" readonly="1"/></div>
     <group string="Nährwerte je 100 ml"><group><field name="elabel_energy_kj"/><field name="elabel_energy_kcal"/><field name="elabel_fat"/><field name="elabel_saturates"/></group><group><field name="elabel_carbohydrate"/><field name="elabel_sugars"/><field name="elabel_protein"/><field name="elabel_salt"/></group></group>
     <group string="Inhaltsstoffe"><field name="elabel_ingredients"/><field name="elabel_allergen_statement"/><field name="elabel_additional_substances"/><field name="elabel_nutrition_note"/></group>
-    <group string="Fachliche und sprachliche Prüfung"><field name="elabel_nutrition_confirmed"/><field name="elabel_allergens_confirmed"/><field name="elabel_source"/><field name="elabel_checked_on"/><field name="elabel_language_ids" widget="many2many_tags"/><field name="elabel_translation_checked"/></group>
+    <group string="Datengrundlage und Sprachen"><field name="elabel_nutrition_confirmed"/><field name="elabel_allergens_confirmed"/><field name="elabel_source"/><field name="elabel_checked_on"/><field name="elabel_language_ids" widget="many2many_tags"/></group>
     <field name="elabel_revision_ids" readonly="1"><list create="0" delete="0"><field name="number"/><field name="name"/><field name="create_date"/><field name="create_uid"/><field name="legacy"/></list></field>
    </page>
   </xpath></field>

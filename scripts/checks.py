@@ -13,7 +13,7 @@ def main():
     for module in MODULES:
         folder=ROOT/module
         manifest=ast.literal_eval((folder/'__manifest__.py').read_text())
-        assert manifest['version']=='19.0.1.4.0',(module,'version')
+        assert manifest['version']=='19.0.1.4.1',(module,'version')
         assert manifest.get('installable'),module
         counts['manifests']+=1
         for entry in manifest.get('data',[]):assert (folder/entry).is_file(),(module,entry)

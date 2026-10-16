@@ -1,5 +1,12 @@
 # Changelog
 
+## 19.0.1.4.1
+
+- Text-/Sprachfassungsbestätigung ist kein Freigabekriterium mehr; Prüffeld aus der Produktansicht entfernt.
+- Nährwertauffälligkeiten werden als gelbe Hinweise angezeigt und verhindern weder Speichern noch Freigabe; Werte werden nicht automatisch korrigiert.
+- Negative bzw. nicht endliche Zahlen bleiben gesperrt. Rechte, Quellen-/Allergenbestätigung, unveränderliche Fassungen und private Dokumentablage bleiben erhalten.
+- 46 native Tests im frischen Prüfbestand erfolgreich, einschließlich Freigabe auffälliger Nährwerte ohne Sprachbestätigung.
+
 ## 19.0.1.4.0
 
 - Datenbankweite, dauerhaft reservierte Tokens einschließlich archivierter Produkte; kontrollierter Abbruch bei Bestandskollisionen statt Änderung gedruckter Kennungen.

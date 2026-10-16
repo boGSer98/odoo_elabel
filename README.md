@@ -1,6 +1,6 @@
 # Wine e-Label für Odoo 19
 
-**Version 19.0.1.4.0 · IT-Service AHD · AGPL-3**
+**Version 19.0.1.4.1 · IT-Service AHD · AGPL-3**
 
 Zutaten-/Nährwertkennzeichnung mit geprüften Veröffentlichungsfassungen, dauerhaften QR-Kennungen und optionaler privater Ablage in Odoo Dokumente. Technische Kontrollen ersetzen weder die fachliche Prüfung der Messwerte noch Rechtsberatung.
 
@@ -20,8 +20,8 @@ Vor dem Update Datenbank, Filestore, Addon-Code und Konfiguration sichern. Zuers
 
 1. Am Produkt im Reiter **E-Label** Zutaten, Allergene und Nährwerte erfassen.
 2. Datenquelle und Prüfdatum eintragen. Nährwerte und Allergenprüfung ausdrücklich bestätigen. Numerische Null allein gilt nicht als bestätigter Messwert.
-3. Freizugebende aktive Sprachen auswählen; bei mehreren Sprachen Übersetzungen prüfen und bestätigen. Übersetzte Produktnamen und Texte über Odoo pflegen. Die Bestätigung ist eine fachliche Erklärung, keine automatische Übersetzungsprüfung.
-4. **Zur Prüfung**: Pflicht-/Plausibilitätskontrollen müssen bestehen.
+3. Freizugebende aktive Sprachen auswählen. Übersetzte Produktnamen und Texte über Odoo pflegen. Eine gesonderte Text-/Sprachprüfung oder Bestätigung ist nicht erforderlich.
+4. **Zur Prüfung**: Pflichtangaben müssen vorhanden sein. Rechnerische Nährwertauffälligkeiten sind gelbe Hinweise und verhindern die Freigabe nicht. Dazu zählen Zucker über Kohlenhydraten, gesättigte Fettsäuren über Gesamtfett, Null-Energie und abweichende kJ-/kcal-Verhältnisse. Negative oder nicht endliche Zahlen bleiben technisch unzulässig.
 5. Ein berechtigter Prüfer wählt **Freigeben**. Erst jetzt entsteht eine unveränderliche Fassung und erstmals eine öffentliche Kennung.
 6. **PDF und QR speichern**: speichert die freigegebene Fassung in der aktuellen Odoo-Sprache, soweit diese freigegeben ist; ansonsten in der ersten freigegebenen Sprache. Für weitere Sprachfassungen mit der entsprechenden Odoo-Benutzersprache erzeugen. Die Sprache steht im Dateinamen und in Dokumente.
 7. **Veröffentlichung öffnen** funktioniert auch ohne Produkt-Schreibrechte, sofern das Produkt gelesen werden darf. Es verändert keine Produktdaten.
