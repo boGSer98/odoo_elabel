@@ -1,1 +1,1 @@
-{'name': 'Wine e-Label – Shop-Anbindung', 'version': '19.0.1.4.1', 'license': 'AGPL-3', 'author': 'IT-Service AHD', 'depends': ['odoo_elabel', 'website_sale'], 'auto_install': True, 'data': ['views/website_sale_templates.xml'], 'installable': True}
+{'name': 'Wine e-Label – Shop-Anbindung', 'version': '19.0.1.4.2', 'license': 'AGPL-3', 'author': 'IT-Service AHD', 'depends': ['odoo_elabel', 'website_sale'], 'auto_install': True, 'data': ['views/website_sale_templates.xml'], 'installable': True}

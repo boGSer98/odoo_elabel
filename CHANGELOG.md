@@ -1,5 +1,11 @@
 # Changelog
 
+## 19.0.1.4.2
+
+- Administrator-Einstellung für ausdrückliche HTTP-Testfreigabe ergänzt; erlaubt auch öffentliche Testdomains ohne TLS. Standard bleibt HTTPS bzw. lokale HTTP-Adressen.
+- URL-Zugangsdaten, Pfade, Queryparameter, Fragmente und ungültige Ports bleiben unabhängig vom Testmodus gesperrt.
+- 51 native Tests bestanden; positive HTTP-Freigabe, Abschalten, Kontextmanipulation und unberechtigte Parameteränderung abgedeckt.
+
 ## 19.0.1.4.1
 
 - Text-/Sprachfassungsbestätigung ist kein Freigabekriterium mehr; Prüffeld aus der Produktansicht entfernt.
