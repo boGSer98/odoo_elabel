@@ -2,8 +2,9 @@
 <odoo>
     <template id="report_wine_elabel_pdf_document">
         <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="product">
-                <t t-set="o" t-value="product"/>
+            <t t-foreach="docs" t-as="record">
+                <t t-set="product" t-value="record._elabel_document_record()"/>
+                <t t-set="o" t-value="record"/>
                 <t t-call="web.basic_layout">
                     <div class="page">
                         <t t-set="elabel_labels" t-value="product._get_elabel_display_labels()"/>

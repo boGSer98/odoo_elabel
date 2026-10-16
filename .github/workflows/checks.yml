@@ -1,0 +1,19 @@
+name: Package checks
+on:
+  push:
+  pull_request:
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python scripts/checks.py
+      - run: git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol show --format= --check HEAD
