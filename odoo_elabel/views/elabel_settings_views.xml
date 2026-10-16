@@ -1,0 +1,8 @@
+<odoo>
+ <record id="elabel_settings_view" model="ir.ui.view">
+  <field name="name">elabel.settings</field><field name="model">res.config.settings</field><field name="inherit_id" ref="base.res_config_settings_view_form"/>
+  <field name="arch" type="xml"><xpath expr="//form" position="inside"><app string="E-Label" name="odoo_elabel" groups="base.group_system"><block title="Testbetrieb"><setting string="HTTP für e-Label-Testzwecke erlauben" help="Nur für Testbetrieb. Im Produktivbetrieb HTTPS verwenden. Zugangsdaten, Pfade und Parameter in der Basisadresse bleiben verboten."><field name="elabel_allow_http_test"/></setting></block></app></xpath></field>
+ </record>
+ <record id="elabel_settings_action" model="ir.actions.act_window"><field name="name">E-Label-Einstellungen</field><field name="res_model">res.config.settings</field><field name="view_mode">form</field><field name="target">current</field><field name="context">{'module':'odoo_elabel','bin_size':False}</field></record>
+ <menuitem id="elabel_settings_menu" name="Einstellungen" parent="menu_elabel_root" action="elabel_settings_action" groups="base.group_system" sequence="99"/>
+</odoo>

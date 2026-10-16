@@ -210,3 +210,31 @@ class TestElabel(TransactionCase):
         self.publish(p);r=p.elabel_current_revision_id
         self.assertEqual(r.payload['numbers']['elabel_sugars'],8)
         self.assertEqual(r.payload['numbers']['elabel_carbohydrate'],1)
+
+    def test_public_http_requires_explicit_test_switch(self):
+        config=self.env['ir.config_parameter'].sudo()
+        config.set_param('odoo_elabel.allow_http_test','False')
+        with self.assertRaises(ValidationError):self.env.company._elabel_validate_base_url('http://labels.example.invalid')
+        config.set_param('odoo_elabel.allow_http_test','True')
+        self.env.company.with_user(self.reviewer)._elabel_validate_base_url('http://labels.example.invalid:8068')
+        config.set_param('odoo_elabel.allow_http_test','False')
+        with self.assertRaises(ValidationError):self.env.company._elabel_validate_base_url('http://labels.example.invalid')
+
+    def test_http_test_switch_never_allows_unsafe_url_parts(self):
+        self.env['ir.config_parameter'].sudo().set_param('odoo_elabel.allow_http_test','True')
+        for url in ['http://user:pass@example.invalid','http://example.invalid/path','http://example.invalid?x=1','http://example.invalid/#x','http://example.invalid:99999','javascript:alert(1)']:
+            with self.assertRaises(ValidationError):self.env.company._elabel_validate_base_url(url)
+
+    def test_normal_editor_cannot_enable_http_test_mode(self):
+        with self.assertRaises(AccessError):self.env['ir.config_parameter'].with_user(self.editor).set_param('odoo_elabel.allow_http_test','True')
+
+    def test_forged_context_does_not_allow_public_http(self):
+        self.env['ir.config_parameter'].sudo().set_param('odoo_elabel.allow_http_test','False')
+        with self.assertRaises(ValidationError):self.env.company.with_context(elabel_allow_http_test=True)._elabel_validate_base_url('http://labels.example.invalid')
+
+    def test_publication_with_http_test_domain_without_text_confirmation(self):
+        self.env['ir.config_parameter'].sudo().set_param('odoo_elabel.allow_http_test','True')
+        self.env.company.elabel_base_url='http://labels.example.invalid'
+        p=self.product(elabel_translation_checked=False);self.publish(p)
+        self.assertTrue(p.elabel_public_url.startswith('http://labels.example.invalid/'))
+        self.assertTrue(p.elabel_enabled)

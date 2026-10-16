@@ -1,6 +1,6 @@
 # Wine e-Label für Odoo 19
 
-**Version 19.0.1.4.1 · IT-Service AHD · AGPL-3**
+**Version 19.0.1.4.2 · IT-Service AHD · AGPL-3**
 
 Zutaten-/Nährwertkennzeichnung mit geprüften Veröffentlichungsfassungen, dauerhaften QR-Kennungen und optionaler privater Ablage in Odoo Dokumente. Technische Kontrollen ersetzen weder die fachliche Prüfung der Messwerte noch Rechtsberatung.
 
@@ -65,7 +65,7 @@ Die öffentliche Seite zeigt nur die aktuelle Freigabefassung, ohne Produktbearb
 
 Sprache: ausdrückliches `?lang=de_DE` / `en_US` / `nl_NL`, dann `Accept-Language`, dann verfügbare Freigabesprache. Nur freigegebene Sprachen werden angeboten. Öffentliche Überschriften enthalten deutsche und niederländische Übersetzungen; Englisch ist die Basissprache. Die Dateien übernehmen die freigegebenen Textübersetzungen und lokalisierte Zahlen.
 
-Unter **Unternehmen → Dauerhafte e-Label-Basis-URL (HTTPS)** eine langfristige Domain konfigurieren. Ohne Angabe gilt `web.base.url`; globale Produkte verwenden immer diese globale Basis statt der zufälligen Betrachterfirma. HTTP ist nur für lokale/private Testadressen erlaubt. Domainwechsel benötigen betriebliche Weiterleitungen für bereits gedruckte URLs; dieses Modul richtet weder DNS noch Reverse-Proxy-Weiterleitungen ein. Bestehende Proxy-/Browser-Caches aus Version 1.3.3 können erst nach Ablauf ihrer alten Gültigkeit verschwinden; neue Antworten sind `no-store`.
+Unter **Unternehmen → Dauerhafte e-Label-Basis-URL (HTTPS)** eine langfristige Domain konfigurieren. Ohne Angabe gilt `web.base.url`; globale Produkte verwenden immer diese globale Basis statt der zufälligen Betrachterfirma. HTTP ist standardmäßig nur für lokale/private Testadressen erlaubt. Für HTTP-Testdomains können technische Administratoren unter **E-Label → Einstellungen → HTTP für e-Label-Testzwecke erlauben** die zusätzliche Testfreigabe einschalten. Sie gilt nur für diese Datenbank (`odoo_elabel.allow_http_test`), ist standardmäßig aus und sollte im Produktivbetrieb ausgeschaltet bleiben. Zugangsdaten, Pfade und Parameter bleiben auch im Testmodus verboten. Domainwechsel benötigen betriebliche Weiterleitungen für bereits gedruckte URLs; dieses Modul richtet weder DNS noch Reverse-Proxy-Weiterleitungen ein. Bestehende Proxy-/Browser-Caches aus Version 1.3.3 können erst nach Ablauf ihrer alten Gültigkeit verschwinden; neue Antworten sind `no-store`.
 
 ## Prüfungen
 
