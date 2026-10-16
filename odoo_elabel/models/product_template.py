@@ -91,15 +91,29 @@ class ProductTemplate(models.Model):
             if not valid:
                 raise ValidationError(self.env._("Nährwerte müssen endliche, nicht negative Zahlen sein."))
 
+    elabel_nutrition_warning = fields.Text(string='Nährwerthinweise', compute='_compute_elabel_nutrition_warning')
+
+    @api.depends(*NUMBER_FIELDS)
+    def _compute_elabel_nutrition_warning(self):
+        for p in self:
+            warnings=[]
+            if p.elabel_sugars > p.elabel_carbohydrate + 0.005:
+                warnings.append(self.env._('Zucker liegt über den angegebenen Kohlenhydraten.'))
+            if p.elabel_saturates > p.elabel_fat + 0.005:
+                warnings.append(self.env._('Gesättigte Fettsäuren liegen über dem angegebenen Gesamtfett.'))
+            if p.elabel_energy_kj <= 0 or p.elabel_energy_kcal <= 0:
+                warnings.append(self.env._('Eine Energieangabe ist null. Bitte die Angaben bei Bedarf kontrollieren.'))
+            else:
+                expected=p.elabel_energy_kcal * 4.184
+                if abs(p.elabel_energy_kj-expected) > max(5.0,expected*0.1):
+                    warnings.append(self.env._('Die kJ-/kcal-Angaben passen rechnerisch nicht zusammen.'))
+            p.elabel_nutrition_warning='\n'.join(warnings) if warnings else False
+
     @api.constrains(*NUMBER_FIELDS)
     def _check_elabel_nutrition_values(self):
         for p in self:
             if any(not math.isfinite(p[f]) or p[f] < 0 for f in NUMBER_FIELDS):
                 raise ValidationError(self.env._('Nährwerte müssen endliche, nicht negative Zahlen sein.'))
-            if p.elabel_sugars > p.elabel_carbohydrate + 0.005:
-                raise ValidationError(self.env._('Zucker darf die Kohlenhydrate nicht überschreiten.'))
-            if p.elabel_saturates > p.elabel_fat + 0.005:
-                raise ValidationError(self.env._('Gesättigte Fettsäuren dürfen das Gesamtfett nicht überschreiten.'))
 
     def _elabel_payload(self):
         self.ensure_one()
@@ -118,16 +132,8 @@ class ProductTemplate(models.Model):
             raise UserError(self.env._('Bitte Nährwerte und Allergenstatus bestätigen sowie Messquelle, Prüfdatum und Sprachen angeben.'))
         if self.elabel_checked_on > fields.Date.context_today(self):
             raise UserError(self.env._('Das Prüfdatum darf nicht in der Zukunft liegen.'))
-        if not self.elabel_translation_checked:
-            raise UserError(self.env._('Bitte die ausgewählten Sprachfassungen ausdrücklich prüfen.'))
         if any(not (v['elabel_ingredients'] or '').strip() for v in self._elabel_payload()['translations'].values()):
             raise UserError(self.env._('Jede freizugebende Sprachfassung benötigt eine Zutatenliste.'))
-        if self.elabel_energy_kj <= 0 or self.elabel_energy_kcal <= 0:
-            raise UserError(self.env._('Die Energieangaben müssen fachlich bestätigt und größer als null sein.'))
-        # Screening, not a legally certified conversion/rounding rule.
-        expected = self.elabel_energy_kcal * 4.184
-        if abs(self.elabel_energy_kj - expected) > max(5.0, expected * 0.1):
-            raise UserError(self.env._('Die kJ-/kcal-Angaben sind auffällig widersprüchlich. Bitte fachlich prüfen.'))
         self.company_id._elabel_validate_base_url(self._get_elabel_base_url())
 
     def _elabel_lock(self):

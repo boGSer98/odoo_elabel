@@ -91,13 +91,14 @@ class TestElabel(TransactionCase):
     def test_confirmations_source_date_languages_required(self):
         for vals in [{'elabel_nutrition_confirmed':False},{'elabel_allergens_confirmed':False},
                      {'elabel_source':False},{'elabel_checked_on':False},
-                     {'elabel_language_ids':[Command.clear()]},{'elabel_translation_checked':False}]:
+                     {'elabel_language_ids':[Command.clear()]}]:
             p=self.product(**vals)
             with self.assertRaises(UserError):p.action_submit_elabel()
 
     def test_energy_screening(self):
         p=self.product(elabel_energy_kcal=1)
-        with self.assertRaises(UserError):p.action_submit_elabel()
+        self.assertTrue(p.elabel_nutrition_warning);self.publish(p)
+        self.assertTrue(p.elabel_enabled)
 
     def test_invalid_numerical_values(self):
         for value in [-1,float('nan'),float('inf')]:
@@ -105,7 +106,8 @@ class TestElabel(TransactionCase):
 
     def test_nutrition_relationships(self):
         for vals in [{'elabel_sugars':8,'elabel_carbohydrate':1},{'elabel_saturates':4,'elabel_fat':1}]:
-            with self.assertRaises(ValidationError),self.cr.savepoint():self.product(**vals)
+            p=self.product(**vals);self.assertTrue(p.elabel_nutrition_warning)
+            self.publish(p);self.assertTrue(p.elabel_enabled)
 
     def test_archive_preserves_publication(self):
         p=self.publish(self.product());token=p.elabel_token;p.active=False
@@ -188,3 +190,23 @@ class TestElabel(TransactionCase):
         a.sudo().write({'thumbnail':base64.b64encode(b'<svg xmlns="http://www.w3.org/2000/svg"/>')})
         self.assertEqual(a.raw,original);self.assertFalse(a.public);self.assertFalse(a.access_token)
         with self.assertRaises(AccessError):a.with_user(self.reader).sudo().write({'thumbnail':False})
+
+    def test_text_confirmation_not_required_even_for_multiple_languages(self):
+        languages=self.env['res.lang'].search([('active','=',True)])
+        p=self.product(elabel_translation_checked=False,elabel_language_ids=[Command.set(languages.ids)])
+        self.publish(p);self.assertTrue(p.elabel_enabled);self.assertEqual(len(self.generate(p)),2)
+
+    def test_zero_energy_warns_but_can_be_published(self):
+        p=self.product(elabel_energy_kj=0,elabel_energy_kcal=0,elabel_translation_checked=False)
+        self.assertTrue(p.elabel_nutrition_warning);self.publish(p);self.assertTrue(p.elabel_enabled)
+
+    def test_nutrition_warning_clears_after_correction(self):
+        p=self.product(elabel_sugars=8,elabel_carbohydrate=1)
+        self.assertTrue(p.elabel_nutrition_warning)
+        p.elabel_carbohydrate=8;self.assertFalse(p.elabel_nutrition_warning)
+
+    def test_warning_display_does_not_modify_input_or_snapshot(self):
+        p=self.product(elabel_sugars=8,elabel_carbohydrate=1)
+        self.publish(p);r=p.elabel_current_revision_id
+        self.assertEqual(r.payload['numbers']['elabel_sugars'],8)
+        self.assertEqual(r.payload['numbers']['elabel_carbohydrate'],1)
