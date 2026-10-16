@@ -14,4 +14,4 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: python scripts/checks.py
-      - run: git diff --check
+      - run: git show --format= --check HEAD

@@ -98,4 +98,3 @@ msgstr "Zout"
 #: code:addons/odoo_elabel/models/presentation.py:0
 msgid "Language"
 msgstr "Taal"
-
