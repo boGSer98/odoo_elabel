@@ -172,6 +172,9 @@
             </head>
             <body>
                 <main class="container">
+                    <nav t-att-aria-label="elabel_labels['language']" t-if="len(elabel_languages) &gt; 1">
+                        <a t-foreach="elabel_languages" t-as="language" t-att-href="'?lang=' + language[0]" style="margin-right:12px;"><t t-esc="language[1]"/></a>
+                    </nav>
                     <section class="card">
                         <h1>
                             <t t-esc="product.display_name"/>

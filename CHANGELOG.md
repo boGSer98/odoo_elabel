@@ -1,5 +1,16 @@
 # Changelog
 
+## 19.0.1.4.0
+
+- Datenbankweite, dauerhaft reservierte Tokens einschließlich archivierter Produkte; kontrollierter Abbruch bei Bestandskollisionen statt Änderung gedruckter Kennungen.
+- Rollenbasierter Entwurf-/Prüf-/Freigabeablauf, unveränderliche Veröffentlichungen, Bestandsmigration und explizite Deaktivierung.
+- Quellen-/Prüfbestätigungen, Zahlen-/Nährwertplausibilität und lesende Vorschau ohne versteckte Schreibzugriffe.
+- Stabile Dokumentidentität je Fassung/Dateiart/Sprache, Quellenhash und Änderungsanzeige; Historie bleibt erhalten.
+- Optionale native Dokumente-Brücke mit gemeinsamem privaten E-Label-Ordner, kontrollierter Bestandszuordnung und Firmen-/Rollenprüfung auch beim Download.
+- Mehrsprachige Veröffentlichung, DE/EN/NL-Ausgabe, lokalisierte PDF-Zahlen, HTTPS-Domainprüfung, No-Store/CSP und Route ohne neue Session-Cookies.
+- Separates automatisch installierbares Shop-Addon; Basismodul funktioniert ohne Dokumente und Shop.
+- Native Regressionstests, Paketvalidator, GitHub CI und Betriebs-/Migrationsdokumentation ergänzt.
+
 ## 19.0.1.3.3
 
 - Deutsche Übersetzungen verwenden echte Umlaute und ß statt ASCII-Umschreibungen wie `ae`, `oe`, `ue` und `ss`.

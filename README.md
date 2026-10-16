@@ -1,107 +1,75 @@
-# Wine e-Label für Odoo 19 CE
+# Wine e-Label für Odoo 19
 
-Dieses Modul erweitert Produkte um ein öffentlich abrufbares Wein-e-Label mit Zutatenliste, Allergenhinweis und Nährwertdeklaration pro 100 ml.
+**Version 19.0.1.4.0 · IT-Service AHD · AGPL-3**
 
-## Ziel
+Zutaten-/Nährwertkennzeichnung mit geprüften Veröffentlichungsfassungen, dauerhaften QR-Kennungen und optionaler privater Ablage in Odoo Dokumente. Technische Kontrollen ersetzen weder die fachliche Prüfung der Messwerte noch Rechtsberatung.
 
-Das Modul ergänzt `product.template` um Felder für gesetzlich relevante e-Label-Daten und veröffentlicht diese Informationen über eine tokenbasierte, lesende Website-Route:
+## Module und Installation
 
-`/wine/e-label/<token>`
+Das Repository enthält jetzt drei eigenständige Addon-Verzeichnisse:
 
-Die öffentliche Seite ist für Endkunden ohne Anmeldung erreichbar, solange das e-Label am Produkt aktiviert ist.
+- `odoo_elabel`: Basismodul; benötigt `product` und `website`, **nicht** Dokumente oder den Shop.
+- `odoo_elabel_documents`: optionale Enterprise-Anbindung; benötigt `documents_product`. Native Dokumente-Ordner und Originalanhänge werden verwendet; keine eigene Dokumentenverwaltung.
+- `odoo_elabel_sale`: optionale, automatisch installierbare Shop-Brücke bei installiertem `website_sale` und Basismodul.
 
-## Funktionsumfang
+**Wichtig beim Update von 19.0.1.3.3:** Nicht mehr den Repository-Stamm als ein einzelnes Addon kopieren. Die drei genannten Verzeichnisse unmittelbar in einen konfigurierten `addons_path` legen. Der technische Name des Basismoduls und bestehende XML-IDs bleiben erhalten.
 
-- Aktivierung je Produkt über das Feld `Wine e-Label`
-- Automatische Vergabe eines eindeutigen Tokens für aktive e-Labels
-- Öffentliche e-Label-URL und QR-Code-URL im Produktformular
-- Zutatenliste mit übersetzbarem Inhalt
-- Allergenhinweis für das physische Etikett, standardmäßig `Enthält Sulfite`
-- Weitere Inhaltsstoffe oder Angaben zur Zusammensetzung
-- Nährwerttabelle pro 100 ml:
-  - Energie in kJ und kcal
-  - Fett
-  - davon gesättigte Fettsäuren
-  - Kohlenhydrate
-  - davon Zucker
-  - Eiweiß
-  - Salz
-- Optionale Nährwertanmerkung
-- Validierung gegen negative Nährwerte
-- Öffentliche Webansicht und PDF-Ausgabe mit demselben QWeb-Baustein
-- QR-Code als SVG und e-Label als PDF in den Produktanhängen
-- Website-Shop-Integration mit Button `View e-Label` auf der Produktseite
+Vor dem Update Datenbank, Filestore, Addon-Code und Konfiguration sichern. Zuerst an einer neutralisierten Kopie prüfen. Nur die gewählte Datenbank aktualisieren, nicht pauschal `-u all`. Das Update stoppt bei Bestands-Tokenkollisionen einschließlich archivierter Produkte. Gedruckte Kennungen **nicht** automatisch ersetzen; Originalzuordnung anhand des Druck-/Produktbestands prüfen. Das Modul ändert keine bestehenden nichtleeren Tokens.
 
-## Bedienung im Produkt
+## Bedienung
 
-Im Produktformular steht der Reiter `Wine e-Label` zur Verfügung. Nach Aktivierung des e-Labels werden die Eingabefelder und Aktionen angezeigt.
+1. Am Produkt im Reiter **E-Label** Zutaten, Allergene und Nährwerte erfassen.
+2. Datenquelle und Prüfdatum eintragen. Nährwerte und Allergenprüfung ausdrücklich bestätigen. Numerische Null allein gilt nicht als bestätigter Messwert.
+3. Freizugebende aktive Sprachen auswählen; bei mehreren Sprachen Übersetzungen prüfen und bestätigen. Übersetzte Produktnamen und Texte über Odoo pflegen. Die Bestätigung ist eine fachliche Erklärung, keine automatische Übersetzungsprüfung.
+4. **Zur Prüfung**: Pflicht-/Plausibilitätskontrollen müssen bestehen.
+5. Ein berechtigter Prüfer wählt **Freigeben**. Erst jetzt entsteht eine unveränderliche Fassung und erstmals eine öffentliche Kennung.
+6. **PDF und QR speichern**: speichert die freigegebene Fassung in der aktuellen Odoo-Sprache, soweit diese freigegeben ist; ansonsten in der ersten freigegebenen Sprache. Für weitere Sprachfassungen mit der entsprechenden Odoo-Benutzersprache erzeugen. Die Sprache steht im Dateinamen und in Dokumente.
+7. **Veröffentlichung öffnen** funktioniert auch ohne Produkt-Schreibrechte, sofern das Produkt gelesen werden darf. Es verändert keine Produktdaten.
 
-- `Generate e-Label` erzeugt oder aktualisiert QR-SVG und PDF und bleibt danach auf der Produktansicht.
-- `Regenerate QR SVG + PDF` baut beide Dokumente erneut auf.
-- `Disable e-Label` deaktiviert das öffentliche e-Label für das Produkt.
-- `Public e-Label URL` öffnet die öffentliche e-Label-Seite in einem neuen Tab.
-- `QR Code URL` öffnet den über die Odoo-Barcode-Route generierten QR-Code.
+Änderungen am Produkt setzen den Arbeitsstand zurück auf Entwurf. Die bisherige Freigabefassung bleibt öffentlich, bis eine neue Fassung freigegeben oder die öffentliche Ausgabe ausdrücklich deaktiviert wird. PDFs werden niemals aus ungeprüften Entwurfsdaten erzeugt. Neue Veröffentlichungen erhalten neue Historienfassungen und neue Dateipaare; Regeneration derselben Fassung/Sprache verwendet dieselben Anhangs-/Dokument-IDs. Artikelnummern sind keine Dateiidentität.
 
-Die erzeugten Dateien werden am `product.template` als Anhänge gespeichert und sind über den Odoo-Dokumenten-Smartbutton sichtbar.
+Das Archivieren eines Produkts widerruft seinen gedruckten Link **nicht**. Dafür gibt es **Öffentliche Ausgabe deaktivieren**. Der Token bleibt auch dann reserviert; Produkte mit vergebenem Token dürfen nicht gelöscht oder in ein anderes Unternehmen verschoben werden. Kopien erhalten weder Token noch Freigabe.
 
-## Öffentliche Ausgabe
+## Rollen
 
-Die öffentliche e-Label-Seite zeigt die Informationen in dieser Reihenfolge:
+- **E-Label bearbeiten**: Label-Entwürfe und ausdrücklich angeforderte Dateierzeugung. Produkt-Schreibrechte werden zusätzlich geprüft und nicht automatisch vergeben.
+- **E-Label prüfen und veröffentlichen**: zusätzlich Freigabe, Deaktivierung und kontrollierte Bestandszuordnung; enthält die Bearbeiterrolle.
+- Technische Odoo-Administratoren sind für Administration freigeschaltet; Firmen-/Produktrechte bleiben bei normalen Benutzern maßgeblich.
+- Für die native Dokumente-App bei Bedarf außerdem die reguläre Dokumente-Benutzerrolle vergeben. Niemand erhält pauschal neue interne Dokumentenrechte.
 
-1. Produktname
-2. Nährwertdeklaration
-3. Zutaten
-4. Allergene
-5. Weitere Inhaltsstoffe
+Das Verfahren ist rollenbasiert, **keine erzwungene personelle Vier-Augen-Trennung**: Ein Prüfer kann eigene Entwürfe freigeben. Eine solche organisatorische Trennung kann betrieblich vorgenommen werden.
 
-Die Seite setzt `Cache-Control: public, max-age=300` sowie `Vary: Accept-Language, Cookie`, damit Sprachvarianten sauber ausgeliefert werden können.
+## Odoo Dokumente
 
-## Sprachverhalten
+Nach Installation der Brücke existiert ein gemeinsamer Ordner namens exakt **E-Label**. Er gehört nicht exklusiv einem Unternehmen; jede Datei behält ihr Produktunternehmen. Geteilte Produkte und deren Dateien bleiben gemäß Odoo-Standard unternehmensübergreifend geteilt, aber nur für berechtigte e-Label-Rollen zugänglich.
 
-Die öffentliche Seite bestimmt die Sprache in dieser Reihenfolge:
+- Native `documents.document`-Dateien verweisen auf die **vorhandenen** `ir.attachment`-Dateien. Kein Kopieren des Binärinhalts.
+- Produkt, Veröffentlichung, Dateiart und Sprache sind dauerhaft verknüpft. Die Liste ist unter **E-Label → Dokumente** erreichbar.
+- Kein öffentlicher Ordnerlink, kein öffentlicher Dateilink, keine automatisch übernommenen Freigabe-Mitglieder. Auch private Anhangs-Downloads sind zusätzlich rollen-/firmenbeschränkt.
+- Native PDF-Vorschaubilder bleiben möglich; PDF-/SVG-Inhalte, Identität und Freigaben sind nicht frei im Dokumente-Editor überschreibbar. Historien-Dateien werden nicht durch normale Lösch-/Kopieraktionen entsorgt.
+- Der normale Dokumentebestand außerhalb des e-Label-Bereichs bleibt unverändert.
 
-1. URL-Parameter `?lang=`
-2. Website-Sprach-Cookie `frontend_lang`
-3. aktueller Odoo-Kontext
-4. Browser-Sprache aus `Accept-Language`
-5. Sprache des öffentlichen Benutzers
-6. Fallback auf `en_US` oder die erste verfügbare Odoo-Sprache
+Falls bereits ein nicht verwalteter gleichnamiger Hauptordner vorhanden ist, wird er **nicht blind übernommen** und kein zweiter angelegt. Technische Administratoren verwenden **E-Label → Ordner konfigurieren** mit ausdrücklicher Bestätigung. Zulässig sind leere Ordner oder Ordner, die ausschließlich anhand der Modulmetadaten nachweisbar verwaltete e-Label-Dateien enthalten. Beliebige Benutzerdateien werden abgewiesen. Nach Deinstallation bleiben Dokumente/Dateien bestehen, die e-Label-Freigaben werden geschlossen. Nach Neuinstallation lässt sich der erhaltene Ordner bewusst erneut zuordnen.
 
-PDF-Erzeugung verwendet einen expliziten Odoo-Sprachkontext. QWeb-Überschriften und Python-Texte werden über Übersetzungen aufgelöst, damit Webansicht und PDF konsistente Texte verwenden.
+### Vorhandene Dateien und Migration
 
-Deutsche Übersetzungen liegen in `i18n/de.po` und `i18n/de_DE.po` und verwenden echte Umlaute sowie ß.
+**E-Label → Bestandsdateien prüfen und zuordnen** zeigt Kandidaten am ausgewählten Produkt. Vor Bestätigung Datei öffnen, Produkt/Fassung/Sprache prüfen. Kein automatisches Verschieben anhand des Dateinamens. Es darf höchstens eine PDF und eine SVG je Fassung/Sprache zugeordnet werden; unklare Altduplikate bleiben unangetastet und müssen historisch eingeordnet werden. Wiederholte Bestätigung ändert weder die Zuordnung noch den Dateiinhalt und erzeugt keine Duplikate. Zuvor öffentliche Altdateien werden bei bestätigter Übernahme privat.
 
-## Technische Hinweise
+Die Software kann den Entstehungsstand alter Binärdateien nicht nachträglich beweisen. Übernommene Altdateien erhalten deshalb keinen bestätigten Quellenhash und bleiben als prüfbedürftig erkennbar. Keine automatische Löschung oder pauschale Token-/Dateierneuerung.
 
-- Zielversion: Odoo 19 Community
-- Modulversion: `19.0.1.3.3`
-- Lizenz: AGPL-3
-- Abhängigkeiten: `product`, `website`, `website_sale`
-- Erweiterte Modelle: `product.template`
-- Öffentliche Route: `/wine/e-label/<token>`
-- Report: `odoo_elabel.action_report_wine_elabel_pdf`
-- QR-Code-Erzeugung: ReportLab, über Odoos bestehende Python-Umgebung
-- Keine zusätzlichen Frontend-Frameworks
+Vorhandene aktivierte 1.3.3-Labels werden als **prüfbedürftige Bestandsfassungen** übernommen, auch bei archivierten Produkten. Ihre bestehenden URLs und Inhalte bleiben zunächst erhalten. Neue Dateierzeugung erfordert zuerst eine fachliche Freigabe nach den neuen Regeln. Deaktivierte Altlabels bleiben deaktiviert.
 
-## Installation
+## Öffentliche Seite, Sprachen und Domain
 
-1. Modul in einen Odoo-Addons-Pfad legen.
-2. App-Liste aktualisieren.
-3. Modul `Wine e-Label` installieren oder aktualisieren.
-4. Im Produktformular den Reiter `Wine e-Label` pflegen.
-5. Bei bestehenden Installationen das Modul aktualisieren, damit Übersetzungen, Views und Reportdefinitionen neu geladen werden.
+Die öffentliche Seite zeigt nur die aktuelle Freigabefassung, ohne Produktbearbeitung, Shop-Layout, Websitebesucher-Tracking oder neue Session-Cookies durch diese Route. Texte werden escaped. Antworten sind nicht cachebar (`no-store`), mit CSP, `nosniff`, Frame-Sperre, Referrer-/Robots-Policy. Unbekannte/deaktivierte Kennungen liefern 404; doppelte Treffer werden nicht nach dem Zufallsprinzip aufgelöst.
 
-Beispiel für ein lokales Modulupdate:
+Sprache: ausdrückliches `?lang=de_DE` / `en_US` / `nl_NL`, dann `Accept-Language`, dann verfügbare Freigabesprache. Nur freigegebene Sprachen werden angeboten. Öffentliche Überschriften enthalten deutsche und niederländische Übersetzungen; Englisch ist die Basissprache. Die Dateien übernehmen die freigegebenen Textübersetzungen und lokalisierte Zahlen.
 
-```bash
-python3 /home/alex/odoo-dev/odoo/odoo-bin \
-  -c /home/alex/odoo-dev/config/odoo-dev.conf \
-  --addons-path="$(python3 /home/alex/odoo-dev/scripts/generate-addons-path.py)" \
-  -d odoo_dev \
-  -u odoo_elabel \
-  --stop-after-init
-```
+Unter **Unternehmen → Dauerhafte e-Label-Basis-URL (HTTPS)** eine langfristige Domain konfigurieren. Ohne Angabe gilt `web.base.url`; globale Produkte verwenden immer diese globale Basis statt der zufälligen Betrachterfirma. HTTP ist nur für lokale/private Testadressen erlaubt. Domainwechsel benötigen betriebliche Weiterleitungen für bereits gedruckte URLs; dieses Modul richtet weder DNS noch Reverse-Proxy-Weiterleitungen ein. Bestehende Proxy-/Browser-Caches aus Version 1.3.3 können erst nach Ablauf ihrer alten Gültigkeit verschwinden; neue Antworten sind `no-store`.
 
-## Rechtlicher Hinweis
+## Prüfungen
 
-Das Modul bildet typische technische Anforderungen für EU-Wein-e-Labels ab. Es ersetzt keine rechtliche Prüfung für den konkreten Betrieb, das konkrete Produkt oder den jeweiligen Zielmarkt.
+- `python3 scripts/checks.py`: Python-/XML-/Manifest-/ACL-/Abhängigkeitsprüfungen ohne Odoo.
+- Native Tests liegen in beiden Addons unter `tests/`; siehe [Prüfbericht](docs/PRUEFBERICHT-19.0.1.4.0.md).
+- GitHub CI prüft das Paket mit Python 3.11/3.12. Enterprise-Runtime-Tests benötigen berechtigten Enterprise-Code und laufen nicht auf einem öffentlichen GitHub-Runner.
+- Energieplausibilität verwendet eine breite technische kJ/kcal-Toleranz und ersetzt keine lebensmittelrechtliche Berechnung. Quelle/Prüfbestätigungen werden durch Bediener verantwortet.

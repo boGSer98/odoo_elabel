@@ -1,0 +1,101 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * odoo_elabel
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: nl_NL\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Wine e-Label"
+msgstr "Wijn e-label"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Nutrition declaration"
+msgstr "Voedingswaardevermelding"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Information per 100 ml"
+msgstr "Informatie per 100 ml"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Ingredients"
+msgstr "Ingrediënten"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Allergens"
+msgstr "Allergenen"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Additional substances"
+msgstr "Aanvullende stoffen"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "This page contains mandatory e-label information only."
+msgstr "Deze pagina bevat uitsluitend verplichte e-labelinformatie."
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Energy"
+msgstr "Energie"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Fat"
+msgstr "Vetten"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "of which saturates"
+msgstr "waarvan verzadigde vetzuren"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Carbohydrate"
+msgstr "Koolhydraten"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "of which sugars"
+msgstr "waarvan suikers"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Protein"
+msgstr "Eiwitten"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Salt"
+msgstr "Zout"
+
+#. module: odoo_elabel
+#. odoo-python
+#: code:addons/odoo_elabel/models/presentation.py:0
+msgid "Language"
+msgstr "Taal"
+
