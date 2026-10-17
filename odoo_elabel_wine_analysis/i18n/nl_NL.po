@@ -25,4 +25,3 @@ msgstr "Restsuiker"
 #: code:addons/odoo_elabel_wine_analysis/models/product_template.py:0
 msgid "Acidity"
 msgstr "Zuurgraad"
-
