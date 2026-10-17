@@ -26,6 +26,12 @@
  <record id="elabel_company_form" model="ir.ui.view"><field name="name">elabel.company.form</field><field name="model">res.company</field><field name="inherit_id" ref="base.view_company_form"/><field name="arch" type="xml"><xpath expr="//sheet" position="inside"><group string="E-Label"><field name="elabel_base_url"/></group></xpath></field></record>
  <record id="elabel_adoption_form" model="ir.ui.view"><field name="name">elabel.adoption.form</field><field name="model">wine.elabel.adoption</field><field name="arch" type="xml"><form string="Vorhandene Labeldateien geprüft zuordnen"><div class="alert alert-warning">Nur ausdrücklich geprüfte Altdateien auswählen. Öffentliche Dateifreigaben werden geschlossen. Ungewählte Anhänge werden weder verschoben noch gelöscht.</div><group><field name="product_id"/><field name="lang_id"/><field name="attachment_ids" widget="many2many_tags"/><field name="confirmed"/></group><footer><button name="action_adopt" type="object" string="Geprüft übernehmen" class="btn-primary"/><button special="cancel" string="Abbrechen"/></footer></form></field></record>
  <record id="elabel_adoption_action" model="ir.actions.act_window"><field name="name">E-Label-Bestandsdateien prüfen</field><field name="res_model">wine.elabel.adoption</field><field name="view_mode">form</field><field name="target">new</field></record>
- <menuitem id="menu_elabel_root" name="E-Label" groups="odoo_elabel.group_elabel_editor,base.group_system" sequence="90"/>
+ <!-- Explicit action reset is required when upgrading the legacy root menu. -->
+ <record id="menu_elabel_root" model="ir.ui.menu">
+  <field name="name">E-Label</field>
+  <field name="sequence">90</field>
+  <field name="group_ids" eval="[(6, 0, [ref('odoo_elabel.group_elabel_editor'), ref('base.group_system')])]"/>
+  <field name="action" eval="False"/>
+ </record>
  <menuitem id="elabel_adoption_menu" name="Bestandsdateien prüfen" parent="menu_elabel_root" action="elabel_adoption_action" groups="odoo_elabel.group_elabel_reviewer,base.group_system" sequence="95"/>
 </odoo>
