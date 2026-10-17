@@ -1,0 +1,17 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. module: odoo_elabel_sale
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.website_sale_elabel_summary
+msgid "Ingredients and nutrition"
+msgstr "Ingrediënten en voedingswaarden"
+
+#. module: odoo_elabel_sale
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.website_sale_product_elabel_button
+msgid "View e-Label"
+msgstr "e-Label bekijken"
