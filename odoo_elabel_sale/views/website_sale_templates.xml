@@ -17,4 +17,39 @@
             </a>
         </xpath>
     </template>
+    <template id="website_sale_elabel_summary" name="Website Sale e-Label Summary">
+            <section t-if="elabel_summary" class="o_elabel_product_summary border rounded p-3 mt-3 mb-3 small"
+                     aria-label="Ingredients and nutrition">
+                <h6 class="mb-2">Ingredients and nutrition</h6>
+                <p t-if="elabel_summary['ingredients']" class="mb-1">
+                    <strong><t t-out="elabel_summary['labels']['ingredients']"/>: </strong>
+                    <span t-out="elabel_summary['ingredients']" style="white-space: pre-wrap; overflow-wrap: anywhere;"/>
+                </p>
+                <p t-if="elabel_summary['allergens']" class="mb-1">
+                    <strong><t t-out="elabel_summary['labels']['allergens']"/>: </strong>
+                    <span t-out="elabel_summary['allergens']" style="white-space: pre-wrap; overflow-wrap: anywhere;"/>
+                </p>
+                <p t-if="elabel_summary['additional_substances']" class="mb-1">
+                    <strong><t t-out="elabel_summary['labels']['additional_substances']"/>: </strong>
+                    <span t-out="elabel_summary['additional_substances']" style="white-space: pre-wrap; overflow-wrap: anywhere;"/>
+                </p>
+                <p class="fw-semibold mt-2 mb-1" t-out="elabel_summary['labels']['information_per_100_ml']"/>
+                <table class="table table-sm table-borderless mb-0 small">
+                    <tbody>
+                        <tr t-foreach="elabel_summary['nutrition_lines']" t-as="line">
+                            <th scope="row" class="fw-normal py-1 ps-0" t-out="line['label']"/>
+                            <td class="py-1 pe-0 text-end" t-out="line['value']"/>
+                        </tr>
+                    </tbody>
+                </table>
+                <p t-if="elabel_summary['nutrition_note']" class="text-muted mt-1 mb-0" t-out="elabel_summary['nutrition_note']"/>
+            </section>
+    </template>
+    <template id="website_sale_product_elabel_contents" inherit_id="website_sale.product"
+              name="Website Sale e-Label Contents">
+        <xpath expr="//t[@t-call='website_sale.cta_wrapper']" position="after">
+            <t t-set="elabel_summary" t-value="product._get_website_elabel_summary(website)"/>
+            <t t-call="odoo_elabel_sale.website_sale_elabel_summary"/>
+        </xpath>
+    </template>
 </odoo>
