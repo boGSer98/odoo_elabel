@@ -7,18 +7,21 @@
         </xpath>
         <xpath expr="//t[@t-call='odoo_elabel.wine_elabel_information']" position="before">
             <t t-set="analysis_lines" t-value="record._get_elabel_pdf_analysis_lines()"/>
+            <style>
+                .o_elabel_pdf_wine_analysis { font-size:13px; line-height:1.35; color:#252525; }
+                .o_elabel_pdf_wine_analysis h2 { font-size:21px; margin:0 0 14px; }
+                .o_elabel_pdf_wine_analysis h3 { font-size:17px; margin:14px 0 8px; padding-bottom:4px; border-bottom:1px solid #dedede; }
+                .o_elabel_pdf_wine_analysis p { width:86%; margin:0 7% 8px; overflow-wrap:break-word; }
+                .o_elabel_pdf_wine_analysis table { width:86%; margin:0 7% 12px; table-layout:fixed; border-collapse:collapse; }
+                .o_elabel_pdf_wine_analysis table th,
+                .o_elabel_pdf_wine_analysis table td { padding:5px 8px; font-size:13px; vertical-align:top; border:0; border-bottom:1px solid #e5e5e5; overflow-wrap:break-word; }
+                .o_elabel_pdf_wine_analysis table th { width:55%; text-align:left; font-weight:600; }
+                .o_elabel_pdf_wine_analysis table td { width:45%; text-align:right; }
+                .o_elabel_pdf_wine_analysis table tbody tr:nth-child(even) { background-color:#f7f7f7; }
+            </style>
             <div t-if="analysis_lines" class="o_elabel_pdf_analysis" style="page-break-inside: avoid;">
-                <style>
-                    .o_elabel_pdf_wine_analysis { font-size:13px; line-height:1.3; }
-                    .o_elabel_pdf_wine_analysis h2 { font-size:21px; margin:0 0 10px; }
-                    .o_elabel_pdf_wine_analysis h3 { font-size:17px; margin:12px 0 6px; }
-                    .o_elabel_pdf_wine_analysis p { margin:0 0 7px; }
-                    .o_elabel_pdf_wine_analysis table { margin-bottom:10px; }
-                    .o_elabel_pdf_wine_analysis table th,
-                    .o_elabel_pdf_wine_analysis table td { padding:4px 6px; font-size:13px; }
-                </style>
                 <h3>Wine analysis</h3>
-                <table class="table table-sm table-bordered" style="width:100%; table-layout:fixed;">
+                <table class="table table-sm table-bordered" style="table-layout:fixed;">
                     <colgroup><col style="width:55%;"/><col style="width:45%;"/></colgroup>
                     <tbody>
                         <tr t-foreach="analysis_lines" t-as="line">

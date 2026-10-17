@@ -1,6 +1,6 @@
 # Weinanalytik und Nullwerte im Shop
 
-Optionales Zusatzmodul `odoo_elabel_wine_analysis` (19.0.1.0.1): Felder unter Produkt → E-Label → Weinanalytik – Shop und Website.
+Optionales Zusatzmodul `odoo_elabel_wine_analysis` (19.0.1.0.2): Felder unter Produkt → E-Label → Weinanalytik – Shop und Website.
 Säuregehalt und Restsüße in g/l, Alkoholgehalt in %. Nicht aus Zucker (g/100 ml) ableiten.
 Neue/geänderte Werte müssen erneut freigegeben werden; die Shop-Anzeige liest ausschließlich die unveränderliche Fassung.
 Alte Fassungen haben keine Analytik und bleiben unverändert; Standard-Nullwerte ändern deren Inhalts-Hash nicht.
@@ -19,3 +19,7 @@ Keine automatische Übernahme in alte Revisionen, kein Publizieren/Ändern reale
 Die PDF zeigt freigegebene Analytikwerte in einer eigenen zweispaltigen Tabelle vor der Nährwertdeklaration. Die Anzeige verwendet die Freigabesprache bzw. deren bestehenden Fallback. Entwurfsänderungen gelangen weder über den Druckbericht noch über PDF/QR-Erzeugung in das Dokument. Ohne Analytik in der freigegebenen Revision wird keine Analytiktabelle erfunden; der Shopfilter für Nullwerte gilt weiterhin nur für Shop/Snippet, nicht für die PDF.
 
 Die Erweiterung erfolgt ausschließlich über ein geerbtes PDF-Template im optionalen Analytik-Modul. Die separate e-Label-Webseite und das gemeinsame Shop-Template bleiben unverändert. Bereits gespeicherte PDF-Dateien werden bei der Modulaktualisierung nicht automatisch überschrieben. Für aktuelle Dateien die bestehende Aktion **PDF/QR erzeugen** verwenden; vorher gespeicherte Dokumente stammen weiterhin aus ihrer damaligen Erzeugung. Kein automatisches erneutes Freigeben und keine Massenregeneration.
+
+## PDF-Abschnitte einheitlich eingerückt
+
+Seit Analytik 19.0.1.0.2 stehen die untergeordneten Tabellen und Textinhalte mittig unter den Überschriften: 86 % Breite und beidseits 7 % Einzug. Analytik und Nährwerte teilen dieselbe Spaltenaufteilung, Bezeichnungen links und Werte rechts. Dezente Trennlinien und alternierende Zeilen erleichtern das Lesen. Nur das PDF-Template wird gestaltet; Werte, Freigaben, Shop, Standalone-Seite und vorhandene Dateien bleiben unverändert.
