@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="s_elabel_information" name="e-Label ingredients and nutrition">
+        <section class="s_elabel_information pt16 pb16" data-snippet="s_elabel_information" data-name="e-Label information">
+            <div class="container">
+                <div class="o_elabel_snippet_content o_not_editable" contenteditable="false">
+                    <p class="text-muted border rounded p-3 mb-0">Choose a product with a published e-label, or use the current product.</p>
+                </div>
+            </div>
+        </section>
+    </template>
+    <template id="s_elabel_information_inner" name="e-Label information (inner block)">
+        <div class="s_elabel_information_inner pt16 pb16"
+             data-snippet="s_elabel_information_inner" data-name="e-Label ingredients and nutrition">
+            <div class="o_elabel_snippet_content o_not_editable" contenteditable="false">
+                <p class="text-muted border rounded p-3 mb-0">Choose a product with a published e-label, or use the current product.</p>
+            </div>
+        </div>
+    </template>
+    <template id="elabel_builder_snippets" inherit_id="website.snippets" name="e-Label builder block">
+        <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="odoo_elabel_sale.s_elabel_information" string="e-Label ingredients and nutrition"
+               group="content" t-thumbnail="/website/static/src/img/snippets_thumbs/s_text_image.svg">
+                <keywords>e-label, ingredients, nutrition, wine, allergens</keywords>
+            </t>
+        </xpath>
+        <xpath expr="//snippets[@id='snippet_content']" position="inside">
+            <t t-snippet="odoo_elabel_sale.s_elabel_information_inner" string="e-Label ingredients and nutrition"
+               t-thumbnail="/website/static/src/img/snippets_thumbs/s_text_image.svg"/>
+        </xpath>
+    </template>
+</odoo>

@@ -83,3 +83,41 @@ class TestShopSummary(TransactionCase):
     def test_empty_summary_has_no_box(self):
         html = str(self.env['ir.qweb']._render('odoo_elabel_sale.website_sale_elabel_summary', {'elabel_summary': False}))
         self.assertNotIn('o_elabel_product_summary', html)
+
+    def snippet_summary(self, product, website=None, lang=None):
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        from odoo.addons.odoo_elabel_sale.controllers.snippet import ElabelSnippet
+        website = website or self.website
+        public_env = self.env(user=website.user_id.id, context=dict(self.env.context, allowed_company_ids=[website.company_id.id]))
+        with patch('odoo.addons.odoo_elabel_sale.controllers.snippet.request', SimpleNamespace(env=public_env, website=website)):
+            return ElabelSnippet()._summary(product, lang)
+
+    def test_snippet_uses_released_summary(self):
+        p = self.publish(self.product())
+        p.elabel_ingredients = 'UNRELEASED'
+        result, code = self.snippet_summary(p.id)
+        self.assertEqual(result['ingredients'], 'Grapes')
+
+    def test_snippet_rejects_unpublished_and_disabled(self):
+        p = self.publish(self.product())
+        p.is_published = False
+        self.assertFalse(self.snippet_summary(p.id)[0])
+        p.is_published = True
+        p.action_disable_elabel()
+        self.assertFalse(self.snippet_summary(p.id)[0])
+
+    def test_snippet_rejects_foreign_site(self):
+        p = self.publish(self.product())
+        other = self.env['website'].create({'name': 'Other snippet site', 'company_id': self.env.company.id})
+        self.assertFalse(self.snippet_summary(p.id, website=other)[0])
+
+    def test_snippet_invalid_identifiers_are_empty(self):
+        for value in [False, -1, 0, 2147483648, '42']:
+            self.assertFalse(self.snippet_summary(value)[0])
+
+    def test_snippet_language_is_restricted_to_site(self):
+        p = self.publish(self.product())
+        result, code = self.snippet_summary(p.id, lang='../../invalid')
+        self.assertTrue(result)
+        self.assertNotEqual(code, '../../invalid')

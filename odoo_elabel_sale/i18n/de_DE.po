@@ -15,3 +15,44 @@ msgstr "Zutaten und Nährwerte"
 #: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.website_sale_product_elabel_button
 msgid "View e-Label"
 msgstr "e-Label anzeigen"
+
+#. module: odoo_elabel_sale
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.s_elabel_information
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.s_elabel_information_inner
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.elabel_builder_snippets
+msgid "e-Label ingredients and nutrition"
+msgstr "e-Label – Zutaten und Nährwerte"
+
+#. module: odoo_elabel_sale
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.s_elabel_information
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.s_elabel_information_inner
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.elabel_builder_snippets
+msgid "e-Label information"
+msgstr "e-Label-Informationen"
+
+#. module: odoo_elabel_sale
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.s_elabel_information
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.s_elabel_information_inner
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_sale.elabel_builder_snippets
+#. odoo-javascript
+#: code:addons/odoo_elabel_sale/static/src/snippets/elabel_information.js:0
+msgid "Choose a product with a published e-label, or use the current product."
+msgstr "Wählen Sie ein Produkt mit veröffentlichtem e-Label oder verwenden Sie das aktuelle Produkt."
+
+#. module: odoo_elabel_sale
+#. odoo-javascript
+#: code:addons/odoo_elabel_sale/static/src/builder/elabel_option.xml:0
+msgid "e-Label product"
+msgstr "e-Label-Produkt"
+
+#. module: odoo_elabel_sale
+#. odoo-javascript
+#: code:addons/odoo_elabel_sale/static/src/builder/elabel_option.xml:0
+msgid "Use current product"
+msgstr "Aktuelles Produkt verwenden"
+
+#. module: odoo_elabel_sale
+#. odoo-javascript
+#: code:addons/odoo_elabel_sale/static/src/builder/elabel_option.xml:0
+msgid "Choose a product for any page. Without a selection, product pages use their current product."
+msgstr "Wählen Sie ein Produkt für eine beliebige Seite. Ohne Auswahl wird auf Produktseiten das aktuelle Produkt verwendet."
