@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odoo_elabel_sale.ElabelOption">
+        <BuilderRow label.translate="e-Label product">
+            <BuilderMany2One model="'product.template'" action="'elabelSnippetProduct'"
+                domain="domain" fields="['id', 'name']" allowUnselect="true"/>
+        </BuilderRow>
+        <BuilderRow>
+            <BuilderButton action="'elabelSnippetAutomatic'" label.translate="Use current product"/>
+        </BuilderRow>
+        <div class="text-muted small px-3">Choose a product for any page. Without a selection, product pages use their current product.</div>
+    </t>
+</templates>
