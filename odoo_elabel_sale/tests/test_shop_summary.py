@@ -81,6 +81,32 @@ class TestShopSummary(TransactionCase):
         self.assertNotIn('0.00 g', html)
         self.assertEqual(len(p.elabel_current_revision_id._presentation('en_US')._get_elabel_nutrition_lines()), 7)
 
+    def test_details_use_one_shared_fixed_two_column_table(self):
+        from lxml import html as lxml_html
+        p = self.publish(self.product(elabel_additional_substances='Additional details'))
+        rendered = self.env['ir.qweb']._render('odoo_elabel_sale.website_sale_elabel_summary', {
+            'elabel_summary': p._get_website_elabel_summary(self.website)})
+        doc = lxml_html.fromstring(str(rendered))
+        table = doc.xpath('.//table[contains(@class,"o_elabel_details")]')[0]
+        self.assertIn('table-layout: fixed', table.get('style'))
+        self.assertEqual(len(table.xpath('./colgroup/col')), 2)
+        self.assertEqual(len(table.xpath('./tbody/tr')), 3)
+        for row in table.xpath('./tbody/tr'):
+            self.assertEqual(len(row.xpath('./th[@scope="row"]')), 1)
+            self.assertEqual(len(row.xpath('./td')), 1)
+            self.assertIn('align-top', row.xpath('./th')[0].get('class'))
+            self.assertIn('text-start', row.xpath('./td')[0].get('class'))
+
+    def test_missing_optional_details_leave_no_empty_alignment_row(self):
+        from lxml import html as lxml_html
+        p = self.publish(self.product(elabel_additional_substances=False))
+        rendered = self.env['ir.qweb']._render('odoo_elabel_sale.website_sale_elabel_summary', {
+            'elabel_summary': p._get_website_elabel_summary(self.website)})
+        doc = lxml_html.fromstring(str(rendered))
+        rows = doc.xpath('.//table[contains(@class,"o_elabel_details")]/tbody/tr')
+        self.assertEqual(len(rows), 2)
+        self.assertTrue(all(row.xpath('./td/text()') for row in rows))
+
     def test_empty_summary_has_no_box(self):
         html = str(self.env['ir.qweb']._render('odoo_elabel_sale.website_sale_elabel_summary', {'elabel_summary': False}))
         self.assertNotIn('o_elabel_product_summary', html)
@@ -190,7 +216,7 @@ class TestShopSummary(TransactionCase):
         summary = p._get_website_elabel_summary(self.website)
         self.assertEqual(summary['nutrition_lines'], [])
         html = str(self.env['ir.qweb']._render('odoo_elabel_sale.website_sale_elabel_summary', {'elabel_summary': summary}))
-        self.assertNotIn('<table', html)
+        self.assertNotIn('o_elabel_nutrition', html)
         self.assertIn('Grapes', html)
         self.assertEqual(len(p.elabel_current_revision_id._presentation('en_US')._get_elabel_nutrition_lines()), 7)
 

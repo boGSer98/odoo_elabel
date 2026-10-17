@@ -24,26 +24,33 @@
             <section t-if="elabel_summary" class="o_elabel_product_summary border rounded p-3 mt-3 mb-3 small"
                      aria-label="Ingredients and nutrition">
                 <h6 class="mb-2">Ingredients and nutrition</h6>
-                <p t-if="elabel_summary['ingredients']" class="mb-1">
-                    <strong><t t-out="elabel_summary['labels']['ingredients']"/>: </strong>
-                    <span t-out="elabel_summary['ingredients']" style="white-space: pre-wrap; overflow-wrap: anywhere;"/>
-                </p>
-                <p t-if="elabel_summary['allergens']" class="mb-1">
-                    <strong><t t-out="elabel_summary['labels']['allergens']"/>: </strong>
-                    <span t-out="elabel_summary['allergens']" style="white-space: pre-wrap; overflow-wrap: anywhere;"/>
-                </p>
-                <p t-if="elabel_summary['additional_substances']" class="mb-1">
-                    <strong><t t-out="elabel_summary['labels']['additional_substances']"/>: </strong>
-                    <span t-out="elabel_summary['additional_substances']" style="white-space: pre-wrap; overflow-wrap: anywhere;"/>
-                </p>
-                <dl t-if="elabel_summary['analysis_lines']" class="o_elabel_analysis mb-2">
-                    <t t-foreach="elabel_summary['analysis_lines']" t-as="line">
-                        <dt class="d-inline fw-semibold" t-out="line['label']"/>:
-                        <dd class="d-inline" t-out="line['value']"/><br/>
-                    </t>
-                </dl>
+                <table t-if="elabel_summary['ingredients'] or elabel_summary['allergens'] or elabel_summary['additional_substances'] or elabel_summary['analysis_lines']"
+                       class="o_elabel_details table table-sm table-borderless mb-2"
+                       style="table-layout: fixed;">
+                    <colgroup><col style="width: 45%;"/><col style="width: 55%;"/></colgroup>
+                    <tbody>
+                        <tr t-if="elabel_summary['ingredients']">
+                            <th scope="row" class="fw-semibold align-top pt-0 pb-1 ps-0 pe-2" style="overflow-wrap: anywhere;"><t t-out="elabel_summary['labels']['ingredients']"/>:</th>
+                            <td class="align-top text-start pt-0 pb-1 pe-0" style="white-space: pre-wrap; overflow-wrap: anywhere;" t-out="elabel_summary['ingredients']"/>
+                        </tr>
+                        <tr t-if="elabel_summary['allergens']">
+                            <th scope="row" class="fw-semibold align-top pt-0 pb-1 ps-0 pe-2" style="overflow-wrap: anywhere;"><t t-out="elabel_summary['labels']['allergens']"/>:</th>
+                            <td class="align-top text-start pt-0 pb-1 pe-0" style="white-space: pre-wrap; overflow-wrap: anywhere;" t-out="elabel_summary['allergens']"/>
+                        </tr>
+                        <tr t-if="elabel_summary['additional_substances']">
+                            <th scope="row" class="fw-semibold align-top pt-0 pb-1 ps-0 pe-2" style="overflow-wrap: anywhere;"><t t-out="elabel_summary['labels']['additional_substances']"/>:</th>
+                            <td class="align-top text-start pt-0 pb-1 pe-0" style="white-space: pre-wrap; overflow-wrap: anywhere;" t-out="elabel_summary['additional_substances']"/>
+                        </tr>
+                    </tbody>
+                    <tbody t-if="elabel_summary['analysis_lines']" class="o_elabel_analysis">
+                        <tr t-foreach="elabel_summary['analysis_lines']" t-as="line">
+                            <th scope="row" class="fw-semibold align-top pt-0 pb-1 ps-0 pe-2" style="overflow-wrap: anywhere;"><t t-out="line['label']"/>:</th>
+                            <td class="align-top text-start pt-0 pb-1 pe-0" style="white-space: pre-wrap; overflow-wrap: anywhere;" t-out="line['value']"/>
+                        </tr>
+                    </tbody>
+                </table>
                 <p t-if="elabel_summary['nutrition_lines']" class="fw-semibold mt-2 mb-1" t-out="elabel_summary['labels']['information_per_100_ml']"/>
-                <table t-if="elabel_summary['nutrition_lines']" class="table table-sm table-borderless mb-0 small">
+                <table t-if="elabel_summary['nutrition_lines']" class="o_elabel_nutrition table table-sm table-borderless mb-0 small">
                     <tbody>
                         <tr t-foreach="elabel_summary['nutrition_lines']" t-as="line">
                             <th scope="row" class="fw-normal py-1 ps-0" t-out="line['label']"/>
