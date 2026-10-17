@@ -1,0 +1,1 @@
+{'name': 'Wine e-Label – Weinanalytik', 'version': '19.0.1.0.0', 'license': 'AGPL-3', 'author': 'IT-Service AHD', 'depends': ['odoo_elabel_sale'], 'data': ['views/product_template_views.xml'], 'installable': True, 'auto_install': False}

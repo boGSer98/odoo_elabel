@@ -56,3 +56,21 @@ msgstr "Aktuelles Produkt verwenden"
 #: code:addons/odoo_elabel_sale/static/src/builder/elabel_option.xml:0
 msgid "Choose a product for any page. Without a selection, product pages use their current product."
 msgstr "Wählen Sie ein Produkt für eine beliebige Seite. Ohne Auswahl wird auf Produktseiten das aktuelle Produkt verwendet."
+
+#. module: odoo_elabel_sale
+#. odoo-python
+#: code:addons/odoo_elabel_sale/models/product_template.py:0
+msgid "Acidity"
+msgstr "Säuregehalt"
+
+#. module: odoo_elabel_sale
+#. odoo-python
+#: code:addons/odoo_elabel_sale/models/product_template.py:0
+msgid "Residual sugar"
+msgstr "Restsüße"
+
+#. module: odoo_elabel_sale
+#. odoo-python
+#: code:addons/odoo_elabel_sale/models/product_template.py:0
+msgid "Alcohol content"
+msgstr "Alkoholgehalt"

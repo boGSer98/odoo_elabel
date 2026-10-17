@@ -5,7 +5,7 @@ import pathlib
 import xml.etree.ElementTree as ET
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-MODULES=('odoo_elabel','odoo_elabel_documents','odoo_elabel_sale')
+MODULES=('odoo_elabel','odoo_elabel_documents','odoo_elabel_sale','odoo_elabel_wine_analysis')
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     for module in MODULES:
         folder=ROOT/module
         manifest=ast.literal_eval((folder/'__manifest__.py').read_text())
-        expected_version = '19.0.1.4.5' if module == 'odoo_elabel_sale' else '19.0.1.4.2'
+        expected_version = {'odoo_elabel':'19.0.1.4.3','odoo_elabel_sale':'19.0.1.4.6','odoo_elabel_documents':'19.0.1.4.2','odoo_elabel_wine_analysis':'19.0.1.0.0'}[module]
         assert manifest['version']==expected_version,(module,'version')
         assert manifest.get('installable'),module
         counts['manifests']+=1

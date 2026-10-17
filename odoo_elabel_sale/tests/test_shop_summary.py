@@ -34,8 +34,8 @@ class TestShopSummary(TransactionCase):
         result = p.with_user(self.website.user_id).with_context(allowed_company_ids=[self.env.company.id])._get_website_elabel_summary(self.website)
         self.assertEqual(result['ingredients'], 'Grapes')
         self.assertEqual(result['allergens'], 'Contains sulphites')
-        self.assertEqual(len(result['nutrition_lines']), 7)
-        self.assertEqual(set(result), {'labels', 'ingredients', 'allergens', 'additional_substances', 'nutrition_note', 'nutrition_lines'})
+        self.assertEqual(len(result['nutrition_lines']), 1)
+        self.assertEqual(set(result), {'labels', 'ingredients', 'allergens', 'additional_substances', 'nutrition_note', 'nutrition_lines', 'analysis_lines'})
 
     def test_unapproved_edit_does_not_leak(self):
         p = self.publish(self.product())
@@ -72,13 +72,14 @@ class TestShopSummary(TransactionCase):
         p = self.publish(self.product())
         self.assertEqual(p.with_context(lang='de_DE')._get_website_elabel_summary(self.website)['ingredients'], 'Grapes')
 
-    def test_template_escapes_ingredients_and_preserves_zero_nutrients(self):
+    def test_shop_escapes_ingredients_and_hides_zero_nutrients(self):
         p = self.publish(self.product(elabel_ingredients='<script>alert(1)</script>'))
         html = str(self.env['ir.qweb']._render('odoo_elabel_sale.website_sale_elabel_summary', {
             'elabel_summary': p._get_website_elabel_summary(self.website)}))
         self.assertNotIn('<script>', html)
         self.assertIn('&lt;script&gt;', html)
-        self.assertIn('0.00 g', html)
+        self.assertNotIn('0.00 g', html)
+        self.assertEqual(len(p.elabel_current_revision_id._presentation('en_US')._get_elabel_nutrition_lines()), 7)
 
     def test_empty_summary_has_no_box(self):
         html = str(self.env['ir.qweb']._render('odoo_elabel_sale.website_sale_elabel_summary', {'elabel_summary': False}))
@@ -136,7 +137,7 @@ class TestShopSummary(TransactionCase):
                 self.assertEqual(summary['ingredients'], 'Grapes')
                 self.assertEqual(self.snippet_summary(p.id)[0]['ingredients'], 'Grapes')
                 self.assertEqual((p.elabel_token, p.elabel_current_revision_id.id), before)
-                self.assertEqual(set(summary), {'labels', 'ingredients', 'allergens', 'additional_substances', 'nutrition_note', 'nutrition_lines'})
+                self.assertEqual(set(summary), {'labels', 'ingredients', 'allergens', 'additional_substances', 'nutrition_note', 'nutrition_lines', 'analysis_lines'})
                 p.action_disable_elabel()
                 self.assertFalse(public._get_website_elabel_summary(self.website))
                 self.assertFalse(self.snippet_summary(p.id)[0])
@@ -183,3 +184,19 @@ class TestShopSummary(TransactionCase):
         self.assertEqual(anchors[0].get('position'), 'after')
         self.assertIn('website_sale.cta_wrapper', anchors[0].get('expr'))
         self.assertNotIn('add_to_cart_wrap', view.arch_db)
+
+    def test_shop_all_zero_hides_nutrition_table(self):
+        p = self.publish(self.product(elabel_energy_kj=0, elabel_energy_kcal=0))
+        summary = p._get_website_elabel_summary(self.website)
+        self.assertEqual(summary['nutrition_lines'], [])
+        html = str(self.env['ir.qweb']._render('odoo_elabel_sale.website_sale_elabel_summary', {'elabel_summary': summary}))
+        self.assertNotIn('<table', html)
+        self.assertIn('Grapes', html)
+        self.assertEqual(len(p.elabel_current_revision_id._presentation('en_US')._get_elabel_nutrition_lines()), 7)
+
+    def test_shop_zero_energy_component_hidden_only_in_shop(self):
+        p = self.publish(self.product(elabel_energy_kj=0, elabel_energy_kcal=24, elabel_fat=0.004, elabel_salt=0.01))
+        summary = p._get_website_elabel_summary(self.website)
+        self.assertEqual([row['value'] for row in summary['nutrition_lines']], ['24.00 kcal', '0.01 g'])
+        standalone = p.elabel_current_revision_id._presentation('en_US')._get_elabel_nutrition_lines()
+        self.assertEqual(standalone[0]['value'], '0.00 kJ / 24.00 kcal')

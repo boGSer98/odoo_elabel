@@ -49,13 +49,17 @@ class ProductTemplate(models.Model):
             raise AccessError(self.env._('Diese Aktion benötigt die entsprechende e-Label-Berechtigung.'))
         self.check_access('write' if write else 'read')
 
+    def _elabel_content_fields(self):
+        """Extension hook; no additional fields in databases without opt-in addons."""
+        return CONTENT_FIELDS
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if (any(vals.get(k) for k in PROTECTED - {'elabel_state'}) or vals.get('elabel_state', 'draft') != 'draft'):
                 raise AccessError(self.env._('Tokens und Veröffentlichung werden ausschließlich durch die Freigabe verwaltet.'))
             self._elabel_check_input(vals)
-            if any(vals.get(k) for k in CONTENT_FIELDS):
+            if any(vals.get(k) for k in self._elabel_content_fields()):
                 self._elabel_require_role()
         return super().create(vals_list)
 
@@ -68,7 +72,7 @@ class ProductTemplate(models.Model):
         if 'company_id' in vals and any(p.elabel_token and p.company_id.id != vals['company_id'] for p in self):
             raise UserError(self.env._('Das Unternehmen eines veröffentlichten Labels darf nicht gewechselt werden.'))
         result = super().write(vals)
-        changes = set(CONTENT_FIELDS) | {'name','elabel_source','elabel_checked_on','elabel_nutrition_confirmed',
+        changes = set(self._elabel_content_fields()) | {'name','elabel_source','elabel_checked_on','elabel_nutrition_confirmed',
                    'elabel_allergens_confirmed','elabel_language_ids','elabel_translation_checked'}
         if changes.intersection(vals):
             for p in self.filtered(lambda r:r.elabel_state != 'draft'):

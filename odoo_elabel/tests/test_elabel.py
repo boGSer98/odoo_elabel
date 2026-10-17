@@ -149,6 +149,8 @@ class TestElabel(TransactionCase):
         with self.assertRaises(UserError):docs.unlink()
 
     def test_company_url_validation(self):
+        # Keep the HTTPS-default test independent of a cloned DB's HTTP test switch.
+        self.env['ir.config_parameter'].sudo().set_param('odoo_elabel.allow_http_test', 'False')
         for url in ['http://public.example.com','https://user:pass@example.com','https://example.com/path','javascript:alert(1)']:
             with self.assertRaises(ValidationError):self.env.company._elabel_validate_base_url(url)
         for url in ['https://labels.example.com','http://127.0.0.1:8998']:
