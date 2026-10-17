@@ -59,7 +59,7 @@ class TestWineAnalysis(TransactionCase):
         self.publish(p)
         self.assertEqual(p._get_website_elabel_summary(self.website)['analysis_lines'], [])
 
-    def test_standalone_and_pdf_stay_mandatory_only(self):
+    def test_standalone_stays_mandatory_only(self):
         p = self.publish(self.product(elabel_acidity_g_l=6.5, elabel_residual_sugar_g_l=8.7, elabel_alcohol_percent=11.5))
         label = p.elabel_current_revision_id._presentation('en_US')
         self.assertFalse(hasattr(label, 'elabel_acidity_g_l'))
@@ -84,3 +84,38 @@ class TestWineAnalysis(TransactionCase):
             p.with_user(user).write({'elabel_acidity_g_l':5.5})
         with self.assertRaises(AccessError):
             self.env['product.template'].with_user(user).create({'name':'Unauthorized analysis', 'elabel_alcohol_percent':12.2})
+
+    def test_pdf_analysis_uses_released_snapshot_not_draft(self):
+        p = self.publish(self.product(elabel_acidity_g_l=6.5, elabel_residual_sugar_g_l=12.2, elabel_alcohol_percent=11.5))
+        before = p._get_elabel_pdf_analysis_lines()
+        self.assertEqual([row['label'] for row in before], ['Alcohol content', 'Residual sugar', 'Acidity'])
+        self.assertEqual([row['value'] for row in before], ['11.50 %', '12.20 g/l', '6.50 g/l'])
+        p.elabel_alcohol_percent = 19.99
+        self.assertEqual(p._get_elabel_pdf_analysis_lines(), before)
+        self.publish(p)
+        self.assertEqual(p._get_elabel_pdf_analysis_lines()[0]['value'], '19.99 %')
+
+    def test_pdf_legacy_and_unreleased_have_no_invented_analysis(self):
+        p = self.product()
+        self.assertEqual(p._get_elabel_pdf_analysis_lines(), [])
+        self.publish(p)
+        self.assertEqual(p._get_elabel_pdf_analysis_lines(), [])
+        p.elabel_alcohol_percent = 12.3
+        self.assertEqual(p._get_elabel_pdf_analysis_lines(), [])
+
+    def test_pdf_keeps_released_zero_values_separate_from_shop_filter(self):
+        p = self.publish(self.product(elabel_alcohol_percent=12.3))
+        self.assertEqual([row['value'] for row in p._get_elabel_pdf_analysis_lines()], ['12.30 %', '0.00 g/l', '0.00 g/l'])
+        self.assertEqual(len(p._get_website_elabel_summary(self.website)['analysis_lines']), 1)
+
+    def test_pdf_html_has_analysis_and_full_nutrition(self):
+        p = self.publish(self.product(elabel_acidity_g_l=6.5, elabel_residual_sugar_g_l=12.2, elabel_alcohol_percent=11.5))
+        p.elabel_alcohol_percent = 19.99
+        rendered = str(self.env['ir.qweb'].with_context(lang='en_US')._render(
+            'odoo_elabel.report_wine_elabel_pdf_document', {'docs':p}))
+        self.assertIn('o_elabel_pdf_analysis', rendered)
+        self.assertIn('11.50 %', rendered)
+        self.assertNotIn('19.99 %', rendered)
+        self.assertIn('12.20 g/l', rendered)
+        self.assertIn('6.50 g/l', rendered)
+        self.assertIn('0.00 g', rendered)

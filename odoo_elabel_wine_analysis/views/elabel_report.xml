@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_wine_elabel_analysis" inherit_id="odoo_elabel.report_wine_elabel_pdf_document"
+              name="Wine e-Label PDF Wine Analysis">
+        <xpath expr="//div[@class='page']" position="attributes">
+            <attribute name="class" add="o_elabel_pdf_wine_analysis" separator=" "/>
+        </xpath>
+        <xpath expr="//t[@t-call='odoo_elabel.wine_elabel_information']" position="before">
+            <t t-set="analysis_lines" t-value="record._get_elabel_pdf_analysis_lines()"/>
+            <div t-if="analysis_lines" class="o_elabel_pdf_analysis" style="page-break-inside: avoid;">
+                <style>
+                    .o_elabel_pdf_wine_analysis { font-size:13px; line-height:1.3; }
+                    .o_elabel_pdf_wine_analysis h2 { font-size:21px; margin:0 0 10px; }
+                    .o_elabel_pdf_wine_analysis h3 { font-size:17px; margin:12px 0 6px; }
+                    .o_elabel_pdf_wine_analysis p { margin:0 0 7px; }
+                    .o_elabel_pdf_wine_analysis table { margin-bottom:10px; }
+                    .o_elabel_pdf_wine_analysis table th,
+                    .o_elabel_pdf_wine_analysis table td { padding:4px 6px; font-size:13px; }
+                </style>
+                <h3>Wine analysis</h3>
+                <table class="table table-sm table-bordered" style="width:100%; table-layout:fixed;">
+                    <colgroup><col style="width:55%;"/><col style="width:45%;"/></colgroup>
+                    <tbody>
+                        <tr t-foreach="analysis_lines" t-as="line">
+                            <th scope="row" class="align-top" t-out="line['label']"/>
+                            <td class="align-top" t-out="line['value']"/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </xpath>
+    </template>
+</odoo>

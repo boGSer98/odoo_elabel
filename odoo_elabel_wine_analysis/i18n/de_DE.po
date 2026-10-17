@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: de_DE\n"
+
+#. module: odoo_elabel_wine_analysis
+#: model_terms:ir.ui.view,arch_db:odoo_elabel_wine_analysis.report_wine_elabel_analysis
+msgid "Wine analysis"
+msgstr "Weinanalytik"
+
+#. module: odoo_elabel_wine_analysis
+#. odoo-python
+#: code:addons/odoo_elabel_wine_analysis/models/product_template.py:0
+msgid "Alcohol content"
+msgstr "Alkoholgehalt"
+
+#. module: odoo_elabel_wine_analysis
+#. odoo-python
+#: code:addons/odoo_elabel_wine_analysis/models/product_template.py:0
+msgid "Residual sugar"
+msgstr "Restsüße"
+
+#. module: odoo_elabel_wine_analysis
+#. odoo-python
+#: code:addons/odoo_elabel_wine_analysis/models/product_template.py:0
+msgid "Acidity"
+msgstr "Säuregehalt"

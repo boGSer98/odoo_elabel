@@ -1,6 +1,7 @@
 import math
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.tools.misc import formatLang
 from odoo.addons.odoo_elabel.models.presentation import CONTENT_FIELDS
 
 ANALYSIS_FIELDS = ('elabel_acidity_g_l', 'elabel_residual_sugar_g_l', 'elabel_alcohol_percent')
@@ -47,3 +48,22 @@ class ProductTemplate(models.Model):
     @api.depends(*CONTENT_FIELDS, *ANALYSIS_FIELDS, 'name', 'elabel_current_revision_id', 'elabel_language_ids')
     def _compute_elabel_document_state(self):
         return super()._compute_elabel_document_state()
+
+    def _get_elabel_pdf_analysis_lines(self):
+        """Only released values, independent of live drafts and website scope."""
+        self.ensure_one()
+        self.check_access('read')
+        revision = self.elabel_current_revision_id
+        if not revision:
+            return []
+        values = revision.payload.get('wine_analysis', {})
+        if not values:
+            return []
+        label = self._elabel_document_record()
+        return [{'label': label.env._(title),
+                 'value': '%s %s' % (formatLang(label.env, values[field], digits=2), unit)}
+                for field, title, unit in [
+                    ('elabel_alcohol_percent', 'Alcohol content', '%'),
+                    ('elabel_residual_sugar_g_l', 'Residual sugar', 'g/l'),
+                    ('elabel_acidity_g_l', 'Acidity', 'g/l')]
+                if field in values]
