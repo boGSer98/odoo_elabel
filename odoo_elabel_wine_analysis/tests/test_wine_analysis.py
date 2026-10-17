@@ -119,3 +119,15 @@ class TestWineAnalysis(TransactionCase):
         self.assertIn('12.20 g/l', rendered)
         self.assertIn('6.50 g/l', rendered)
         self.assertIn('0.00 g', rendered)
+
+    def test_pdf_sections_share_centered_indented_layout(self):
+        p = self.publish(self.product(elabel_acidity_g_l=6.5, elabel_residual_sugar_g_l=12.2, elabel_alcohol_percent=11.5))
+        rendered = str(self.env['ir.qweb'].with_context(lang='en_US')._render(
+            'odoo_elabel.report_wine_elabel_pdf_document', {'docs':p}))
+        self.assertIn('width:86%; margin:0 7% 12px', rendered)
+        self.assertIn('width:86%; margin:0 7% 8px', rendered)
+        self.assertIn('text-align:right', rendered)
+        self.assertIn('text-align:left', rendered)
+        self.assertNotIn('width:100%', rendered)
+        self.assertIn('11.50 %', rendered)
+        self.assertIn('0.00 g', rendered)
