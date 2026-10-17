@@ -10,7 +10,7 @@
                     <field name="elabel_acidity_g_l"/>
                     <field name="elabel_residual_sugar_g_l"/>
                     <field name="elabel_alcohol_percent"/>
-                    <div class="text-muted">Angaben erscheinen nach erneuter Freigabe im Shop-/Snippet-Block. Nullwerte werden dort ausgeblendet. Die separate e-Label-Seite und PDFs bleiben unverändert.</div>
+                    <div class="text-muted" colspan="2">Angaben erscheinen nach erneuter Freigabe im Shop-/Snippet-Block. Nullwerte werden dort ausgeblendet. Die separate e-Label-Seite und PDFs bleiben unverändert.</div>
                 </group>
             </xpath>
         </field>
