@@ -19,7 +19,7 @@ export class ElabelOption extends BaseOptionComponent {
         });
     }
     get domain() {
-        return [["is_published", "=", true], ["sale_ok", "=", true], ["elabel_enabled", "=", true],
+        return [["active", "in", [true, false]], ["elabel_enabled", "=", true],
             ["elabel_current_revision_id", "!=", false], ["website_id", "in", [false, this.websiteId]],
             ["company_id", "in", [false, this.companyId]]];
     }

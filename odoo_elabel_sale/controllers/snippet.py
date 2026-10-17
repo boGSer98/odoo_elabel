@@ -12,11 +12,11 @@ class ElabelSnippet(http.Controller):
         normalized = (lang or '').lower().replace('-', '_') if isinstance(lang, str) else ''
         code = next((c for c in languages if c.lower() == normalized), None)
         code = code or next((c for c in languages if c.split('_')[0].lower() == normalized.split('_')[0]), request.env.lang)
-        domain = [('id', '=', product_id), ('is_published', '=', True), ('sale_ok', '=', True),
+        domain = [('id', '=', product_id),
                   ('elabel_enabled', '=', True), ('website_id', 'in', [False, website.id]),
                   ('company_id', 'in', [False, website.company_id.id])]
         try:
-            product = request.env['product.template'].with_context(lang=code).search(domain, limit=1)
+            product = request.env['product.template'].sudo().with_context(lang=code, active_test=False).search(domain, limit=1)
             return (product._get_website_elabel_summary(website) if product else False), code
         except AccessError:
             return False, code

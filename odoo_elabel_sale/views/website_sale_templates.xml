@@ -2,12 +2,14 @@
 <odoo>
     <template
         id="website_sale_product_elabel_button"
-        inherit_id="website_sale.cta_wrapper"
+        inherit_id="website_sale.product"
+        priority="20"
         name="Website Sale e-Label Button"
     >
-        <xpath expr="//div[@id='add_to_cart_wrap']" position="inside">
+        <xpath expr="//t[@t-call='website_sale.cta_wrapper']" position="after">
+            <div t-if="product._get_website_elabel_summary(website)" class="o_elabel_standalone_button mt-2">
             <a
-                t-if="product.elabel_enabled and product.elabel_token"
+
                 class="btn btn-outline-secondary flex-grow-1 flex-lg-grow-0"
                 t-att-href="product._get_elabel_public_route()"
                 target="_blank"
@@ -15,6 +17,7 @@
             >
                 View e-Label
             </a>
+            </div>
         </xpath>
     </template>
     <template id="website_sale_elabel_summary" name="Website Sale e-Label Summary">

@@ -42,20 +42,20 @@ class TestShopSummary(TransactionCase):
         p.elabel_ingredients = 'PRIVATE UNAPPROVED CHANGES'
         self.assertEqual(p._get_website_elabel_summary(self.website)['ingredients'], 'Grapes')
 
-    def test_unpublished_product_hidden(self):
+    def test_unpublished_product_label_remains_public(self):
         p = self.publish(self.product())
         p.is_published = False
-        self.assertFalse(p._get_website_elabel_summary(self.website))
+        self.assertEqual(p._get_website_elabel_summary(self.website)['ingredients'], 'Grapes')
 
     def test_disabled_label_hidden(self):
         p = self.publish(self.product())
         p.action_disable_elabel()
         self.assertFalse(p._get_website_elabel_summary(self.website))
 
-    def test_archived_product_hidden(self):
+    def test_archived_product_label_remains_public(self):
         p = self.publish(self.product())
         p.active = False
-        self.assertFalse(p._get_website_elabel_summary(self.website))
+        self.assertEqual(p._get_website_elabel_summary(self.website)['ingredients'], 'Grapes')
 
     def test_other_website_hidden(self):
         p = self.publish(self.product())
@@ -99,10 +99,10 @@ class TestShopSummary(TransactionCase):
         result, code = self.snippet_summary(p.id)
         self.assertEqual(result['ingredients'], 'Grapes')
 
-    def test_snippet_rejects_unpublished_and_disabled(self):
+    def test_snippet_survives_unpublication_but_respects_label_disable(self):
         p = self.publish(self.product())
         p.is_published = False
-        self.assertFalse(self.snippet_summary(p.id)[0])
+        self.assertEqual(self.snippet_summary(p.id)[0]['ingredients'], 'Grapes')
         p.is_published = True
         p.action_disable_elabel()
         self.assertFalse(self.snippet_summary(p.id)[0])
@@ -121,3 +121,65 @@ class TestShopSummary(TransactionCase):
         result, code = self.snippet_summary(p.id, lang='../../invalid')
         self.assertTrue(result)
         self.assertNotEqual(code, '../../invalid')
+
+    def test_public_label_survives_all_product_statuses(self):
+        cases = [dict(is_published=False), dict(sale_ok=False), dict(active=False),
+                 dict(active=False, is_published=False, sale_ok=False)]
+        for changes in cases:
+            with self.subTest(changes=changes):
+                p = self.publish(self.product())
+                before = (p.elabel_token, p.elabel_current_revision_id.id)
+                p.write(changes)
+                p.elabel_ingredients = 'PRIVATE DRAFT AFTER WITHDRAWAL'
+                public = p.with_user(self.website.user_id).with_context(allowed_company_ids=[self.env.company.id])
+                summary = public._get_website_elabel_summary(self.website)
+                self.assertEqual(summary['ingredients'], 'Grapes')
+                self.assertEqual(self.snippet_summary(p.id)[0]['ingredients'], 'Grapes')
+                self.assertEqual((p.elabel_token, p.elabel_current_revision_id.id), before)
+                self.assertEqual(set(summary), {'labels', 'ingredients', 'allergens', 'additional_substances', 'nutrition_note', 'nutrition_lines'})
+                p.action_disable_elabel()
+                self.assertFalse(public._get_website_elabel_summary(self.website))
+                self.assertFalse(self.snippet_summary(p.id)[0])
+
+    def test_archived_unreleased_product_still_hidden(self):
+        p = self.product(active=False, is_published=False, sale_ok=False)
+        self.assertFalse(p._get_website_elabel_summary(self.website))
+        self.assertFalse(self.snippet_summary(p.id)[0])
+
+    def test_archived_labels_still_respect_site_and_company(self):
+        p = self.publish(self.product())
+        p.write(dict(active=False, is_published=False, sale_ok=False))
+        other = self.env['website'].create({'name': 'Wrong label site', 'company_id': self.env.company.id})
+        self.assertFalse(self.snippet_summary(p.id, website=other)[0])
+        p.website_id = False
+        company = self.env['res.company'].create({'name': 'Foreign label company'})
+        other.company_id = company
+        self.assertFalse(self.snippet_summary(p.id, website=other)[0])
+
+    def test_builder_domain_includes_archived_label(self):
+        p = self.publish(self.product())
+        p.write(dict(active=False, is_published=False, sale_ok=False))
+        domain = [('id', '=', p.id), ('active', 'in', [True, False]), ('elabel_enabled', '=', True),
+                  ('elabel_current_revision_id', '!=', False), ('website_id', 'in', [False, self.website.id]),
+                  ('company_id', 'in', [False, self.website.company_id.id])]
+        self.assertEqual(self.env['product.template'].with_context(active_test=True).search(domain), p)
+        names = self.env['product.template'].with_context(active_test=True).name_search(domain=domain)
+        self.assertEqual([item[0] for item in names], p.ids)
+
+    def test_zero_stock_does_not_hide_label(self):
+        if 'is_storable' not in self.env['product.template']._fields:
+            self.skipTest('Stock is not installed')
+        p = self.publish(self.product(is_storable=True))
+        self.assertEqual(p.qty_available, 0)
+        self.assertEqual(self.snippet_summary(p.id)[0]['ingredients'], 'Grapes')
+
+    def test_label_button_outside_purchase_wrapper(self):
+        view = self.env.ref('odoo_elabel_sale.website_sale_product_elabel_button')
+        self.assertEqual(view.inherit_id, self.env.ref('website_sale.product'))
+        from lxml import etree
+        root = etree.fromstring(view.arch_db.encode())
+        anchors = root.xpath('self::xpath | .//xpath')
+        self.assertEqual(len(anchors), 1)
+        self.assertEqual(anchors[0].get('position'), 'after')
+        self.assertIn('website_sale.cta_wrapper', anchors[0].get('expr'))
+        self.assertNotIn('add_to_cart_wrap', view.arch_db)
