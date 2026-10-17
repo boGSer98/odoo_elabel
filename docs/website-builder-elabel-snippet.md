@@ -1,6 +1,6 @@
 # e-Label als Website-Builder-Baustein
 
-Shop-Anbindung: `odoo_elabel_sale 19.0.1.4.5`; e-Label-Core und Documents bleiben unverändert.
+Shop-Anbindung: `odoo_elabel_sale 19.0.1.4.6`; e-Label-Core und Documents bleiben unverändert.
 
 ## Verwendung
 
@@ -38,3 +38,7 @@ Die Produkt-Shopseite selbst wird dadurch weder veröffentlicht noch kaufbar gem
 oder archivierten Produkten kann sie weiterhin 404 liefern. Label-URL/QR und separat platzierter Snippet
 bleiben zugänglich. Der e-Label-Button auf erreichbaren Produktseiten liegt außerhalb des kaufabhängigen
 `add_to_cart_wrap`, damit das Ausblenden von Kaufaktionen den Label-Link nicht entfernt.
+
+## Weinanalytik und Nullwerte
+
+Siehe [Weinanalytik und Nullwerte im Shop](wine-analysis-and-zero-display.md). Zusätzliche Eingabefelder stammen aus dem optionalen Analytik-Modul. Nur Shop/Snippet blenden auf 0,00 gerundete Werte aus.

@@ -1,6 +1,6 @@
 # e-Label information on the product page
 
-The optional `odoo_elabel_sale` bridge keeps the existing e-Label button and adds a small bordered information panel directly after the native purchase CTA and before purchase terms. It displays ingredients, the configured allergen statement, optional additional substances/nutrition note and all seven nutrient rows per 100 ml.
+The optional `odoo_elabel_sale` bridge keeps the existing e-Label button and adds a small bordered information panel directly after the native purchase CTA and before purchase terms. It displays ingredients, the configured allergen statement, optional additional substances/nutrition note and the nonzero nutrient rows per 100 ml (shop-only zero suppression; the standalone/PDF retain all seven rows).
 
 There is no second data-entry area. Only the active immutable publication is displayed, using the same `LabelPresentation` formatter and published-language fallback as the dedicated e-Label page. Unapproved edits never appear in the shop until republished. Disabling the public label hides the box; products without a published label get no empty box.
 

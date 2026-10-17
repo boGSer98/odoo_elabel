@@ -36,8 +36,14 @@
                     <strong><t t-out="elabel_summary['labels']['additional_substances']"/>: </strong>
                     <span t-out="elabel_summary['additional_substances']" style="white-space: pre-wrap; overflow-wrap: anywhere;"/>
                 </p>
-                <p class="fw-semibold mt-2 mb-1" t-out="elabel_summary['labels']['information_per_100_ml']"/>
-                <table class="table table-sm table-borderless mb-0 small">
+                <dl t-if="elabel_summary['analysis_lines']" class="o_elabel_analysis mb-2">
+                    <t t-foreach="elabel_summary['analysis_lines']" t-as="line">
+                        <dt class="d-inline fw-semibold" t-out="line['label']"/>:
+                        <dd class="d-inline" t-out="line['value']"/><br/>
+                    </t>
+                </dl>
+                <p t-if="elabel_summary['nutrition_lines']" class="fw-semibold mt-2 mb-1" t-out="elabel_summary['labels']['information_per_100_ml']"/>
+                <table t-if="elabel_summary['nutrition_lines']" class="table table-sm table-borderless mb-0 small">
                     <tbody>
                         <tr t-foreach="elabel_summary['nutrition_lines']" t-as="line">
                             <th scope="row" class="fw-normal py-1 ps-0" t-out="line['label']"/>
