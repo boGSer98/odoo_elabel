@@ -8,14 +8,15 @@ class ProductTemplate(models.Model):
         """Only expose the same immutable publication as the public e-label."""
         self.ensure_one()
         website.ensure_one()
-        self.check_access('read')
-        if (not self.active or (self.website_id and self.website_id != website)
+        # A released label is public independently of product/shop permissions.
+        # Elevate only this read-only projection; never return the private product.
+        self = self.sudo().with_context(active_test=False)
+        if (not self.exists() or (self.website_id and self.website_id != website)
                 or (self.company_id and self.company_id != website.company_id)
-                or not self.with_context(website_id=website.id).website_published
                 or not self.elabel_enabled or not self.elabel_token):
             return False
-        # Revision ACLs are intentionally private. Authorize the public product/site
-        # first and return only published display values, never a sudo record/payload.
+        # Keep site/company boundaries and explicit label release; expose only display
+        # values from the immutable revision, never a product or raw payload.
         revision = self.sudo().elabel_current_revision_id
         if not revision or revision.product_id.id != self.id:
             return False

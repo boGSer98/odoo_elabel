@@ -13,7 +13,7 @@ def main():
     for module in MODULES:
         folder=ROOT/module
         manifest=ast.literal_eval((folder/'__manifest__.py').read_text())
-        expected_version = '19.0.1.4.4' if module == 'odoo_elabel_sale' else '19.0.1.4.2'
+        expected_version = '19.0.1.4.5' if module == 'odoo_elabel_sale' else '19.0.1.4.2'
         assert manifest['version']==expected_version,(module,'version')
         assert manifest.get('installable'),module
         counts['manifests']+=1
