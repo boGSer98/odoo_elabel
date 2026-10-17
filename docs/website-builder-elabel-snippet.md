@@ -1,6 +1,6 @@
 # e-Label als Website-Builder-Baustein
 
-Shop-Anbindung: `odoo_elabel_sale 19.0.1.4.6`; e-Label-Core und Documents bleiben unverändert.
+Shop-Anbindung: `odoo_elabel_sale 19.0.1.4.7`; e-Label-Core und Documents bleiben unverändert.
 
 ## Verwendung
 
@@ -38,6 +38,10 @@ Die Produkt-Shopseite selbst wird dadurch weder veröffentlicht noch kaufbar gem
 oder archivierten Produkten kann sie weiterhin 404 liefern. Label-URL/QR und separat platzierter Snippet
 bleiben zugänglich. Der e-Label-Button auf erreichbaren Produktseiten liegt außerhalb des kaufabhängigen
 `add_to_cart_wrap`, damit das Ausblenden von Kaufaktionen den Label-Link nicht entfernt.
+
+## Einheitliche Werteausrichtung
+
+Zutaten, Allergene, weitere Inhaltsstoffe und Weinanalytik verwenden dieselbe feste Zweispalten-Tabelle. Bezeichnungen stehen links, sämtliche Werte beginnen an derselben senkrechten Linie. Mehrzeilige Texte sind oben ausgerichtet und umbrechen auch in schmalen Ansichten. Die Nährwerttabelle bleibt unverändert rechtsbündig für ihre Zahlen; Standalone-Label und PDFs bleiben unverändert.
 
 ## Weinanalytik und Nullwerte
 
